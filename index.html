@@ -40,7 +40,7 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.3); border-radius: 3px; }
 
-        /* ============== ЭКРАН ВХОДА / РЕГИСТРАЦИИ ============== */
+        /* ============== ЭКРАН ВХОДА ============== */
         .auth-screen {
             position: fixed;
             inset: 0;
@@ -66,6 +66,7 @@
             display: flex;
             flex-direction: column;
             gap: 14px;
+            margin: auto;
         }
 
         .auth-card h1 { font-size: 1.4rem; font-weight: 600; color: #0f172a; }
@@ -185,18 +186,18 @@
             justify-content: space-between;
             align-items: center;
             flex-wrap: nowrap;
-            gap: 10px;
-            padding: 12px 16px;
+            gap: 8px;
+            padding: 8px 12px;
             background: #b8c4d4;
             flex-shrink: 0;
         }
 
         .user-greeting {
-            font-size: 0.9rem;
+            font-size: 0.82rem;
             font-weight: 500;
             color: #0f172a;
             background: #ffffff;
-            padding: 8px 14px;
+            padding: 7px 12px;
             border-radius: 40px;
             border: 1px solid #94a3b8;
             white-space: nowrap;
@@ -205,17 +206,17 @@
             max-width: 50%;
         }
 
-        .top-actions { display: flex; gap: 8px; align-items: center; }
+        .top-actions { display: flex; gap: 6px; align-items: center; }
 
         .btn-icon {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             padding: 0;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1rem;
             background: #ffffff;
             color: #1e293b;
             border: 1px solid #94a3b8;
@@ -227,9 +228,31 @@
         .btn-icon:hover { background: #f1f5f9; }
         .btn-icon:disabled { opacity: 0.5; cursor: wait; }
 
+        .search-bar {
+            padding: 0 12px 10px;
+            background: #b8c4d4;
+            flex-shrink: 0;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #94a3b8;
+            border-radius: 40px;
+            background: #ffffff;
+            font-size: 0.9rem;
+            outline: none;
+            font-family: inherit;
+            color: #0f172a;
+            min-height: 42px;
+        }
+
+        .search-input:focus { border-color: #475569; }
+        .search-input::placeholder { color: #94a3b8; }
+
         .grid-wrapper {
             flex: 1;
-            padding: 0 16px calc(16px + var(--safe-bottom));
+            padding: 0 12px calc(12px + var(--safe-bottom));
             overflow-y: auto;
             min-height: 0;
         }
@@ -238,14 +261,14 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(2, minmax(280px, 1fr));
-            gap: 16px;
+            gap: 14px;
             min-height: 100%;
         }
 
         .dept-card {
             background: #ffffff;
             border-radius: 20px;
-            padding: 14px 16px;
+            padding: 12px 14px;
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.07);
             border: 1px solid #94a3b8;
             display: flex;
@@ -261,16 +284,16 @@
         }
 
         .dept-title {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: #1e293b;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 8px;
             border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             flex-shrink: 0;
         }
 
@@ -281,8 +304,7 @@
         }
 
         .dept-count {
-            font-size: 0.75rem;
-            font-weight: 400;
+            font-size: 0.72rem;
             color: #475569;
             background: #e2e8f0;
             padding: 2px 8px;
@@ -293,7 +315,7 @@
         .equipment-list {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
             flex: 1;
             overflow-y: auto;
             padding-right: 2px;
@@ -304,10 +326,10 @@
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            padding: 10px 12px;
+            padding: 8px 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             cursor: pointer;
             transition: 0.12s;
             user-select: none;
@@ -322,7 +344,7 @@
 
         .equipment-name {
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.78rem;
             color: #0f172a;
             white-space: nowrap;
             overflow: hidden;
@@ -330,20 +352,20 @@
         }
 
         .equipment-details {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #475569;
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
             margin-top: 3px;
             align-items: center;
         }
 
         .equipment-status {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 1px 6px;
             border-radius: 30px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 500;
         }
 
@@ -357,7 +379,7 @@
 
         .empty-message {
             color: #64748b;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-style: italic;
             padding: 12px 0;
             text-align: center;
@@ -370,28 +392,30 @@
             background: rgba(15, 23, 42, 0.55);
             backdrop-filter: blur(2px);
             display: none;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             z-index: 1100;
-            padding: 16px;
-            padding-top: calc(16px + var(--safe-top));
-            padding-bottom: calc(16px + var(--safe-bottom));
+            padding: 8px;
+            padding-top: calc(8px + var(--safe-top));
+            padding-bottom: calc(8px + var(--safe-bottom));
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .modal-overlay.open { display: flex; }
 
         .modal-panel {
             background: #ffffff;
-            border-radius: 24px;
+            border-radius: 20px;
             box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
             width: 100%;
             max-width: 480px;
             border: 1px solid #cbd5e1;
             display: flex;
             flex-direction: column;
-            max-height: 90vh;
+            max-height: calc(100dvh - 16px - var(--safe-top) - var(--safe-bottom));
             overflow: hidden;
+            margin: auto;
         }
 
         .modal-panel.wide { max-width: 640px; }
@@ -401,14 +425,14 @@
             justify-content: space-between;
             align-items: center;
             gap: 8px;
-            padding: 14px 18px;
+            padding: 10px 14px;
             border-bottom: 1px solid #e2e8f0;
             background: #f8fafc;
             flex-shrink: 0;
         }
 
         .modal-header h2 {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: #0f172a;
             overflow: hidden;
@@ -419,62 +443,64 @@
         .modal-header-actions { display: flex; gap: 6px; flex-shrink: 0; }
 
         .modal-header-actions .btn {
-            padding: 8px 14px;
-            font-size: 0.85rem;
-            min-height: 38px;
+            padding: 6px 12px;
+            font-size: 0.78rem;
+            min-height: 34px;
         }
 
         .modal-body {
-            padding: 18px;
+            padding: 14px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 10px;
             min-height: 0;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .field-row { display: flex; gap: 12px; }
+        .field-row { display: flex; gap: 10px; }
         .field-row .field { flex: 1; }
 
         .photo-block {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
-            padding: 12px;
+            padding: 10px;
             border-radius: 12px;
             border: 1px dashed #cbd5e1;
             background: #f8fafc;
         }
 
         .photo-preview {
-            width: 72px;
-            height: 72px;
+            width: 68px;
+            height: 68px;
             border-radius: 10px;
             object-fit: cover;
             background: #e2e8f0;
             flex-shrink: 0;
             border: 1px solid #e2e8f0;
+            cursor: zoom-in;
         }
 
         .photo-actions { display: flex; flex-direction: column; gap: 6px; flex: 1; }
 
         .photo-actions .btn {
-            padding: 8px 12px;
-            font-size: 0.8rem;
+            padding: 7px 12px;
+            font-size: 0.78rem;
             width: 100%;
-            min-height: 38px;
+            min-height: 36px;
         }
 
-        .status-choice { display: flex; gap: 10px; }
+        .status-choice { display: flex; gap: 8px; }
 
         .status-choice label {
             flex: 1;
-            padding: 12px;
+            padding: 10px;
             border-radius: 12px;
             border: 1px solid #94a3b8;
             text-align: center;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
             user-select: none;
             transition: 0.15s;
@@ -488,10 +514,10 @@
         .status-choice label.broken-choice.selected { background: #fca5a5; border-color: #991b1b; }
 
         .move-info {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             color: #475569;
             background: #f8fafc;
-            padding: 12px 14px;
+            padding: 10px 12px;
             border-radius: 12px;
             border: 1px solid #e2e8f0;
             display: flex;
@@ -503,40 +529,40 @@
         .move-info .arrow { color: #64748b; font-weight: 600; }
 
         .equipment-history-title {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 600;
             color: #475569;
             margin-top: 4px;
-            padding-top: 12px;
+            padding-top: 10px;
             border-top: 1px solid #e2e8f0;
         }
 
-        .history-list { display: flex; flex-direction: column; gap: 8px; }
+        .history-list { display: flex; flex-direction: column; gap: 6px; }
 
         .history-item {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
-            padding: 10px 14px;
-            font-size: 0.8rem;
+            padding: 8px 12px;
+            font-size: 0.78rem;
         }
 
         .history-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
+            gap: 8px;
+            margin-bottom: 4px;
             flex-wrap: wrap;
         }
 
-        .history-action { font-weight: 600; color: #0f172a; font-size: 0.82rem; }
-        .history-time { font-size: 0.72rem; color: #94a3b8; white-space: nowrap; }
+        .history-action { font-weight: 600; color: #0f172a; font-size: 0.78rem; }
+        .history-time { font-size: 0.68rem; color: #94a3b8; white-space: nowrap; }
 
         .history-body {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px 12px;
+            gap: 6px 10px;
             align-items: center;
         }
 
@@ -545,11 +571,11 @@
             align-items: center;
             gap: 6px;
             background: #ffffff;
-            padding: 3px 12px;
+            padding: 3px 10px;
             border-radius: 30px;
             border: 1px solid #e2e8f0;
             font-weight: 500;
-            font-size: 0.78rem;
+            font-size: 0.72rem;
         }
 
         .history-route .arrow { color: #64748b; font-weight: 600; }
@@ -559,31 +585,76 @@
             align-items: center;
             gap: 4px;
             color: #475569;
-            font-size: 0.78rem;
+            font-size: 0.72rem;
         }
 
-        .history-user::before { content: "👤"; font-size: 0.75rem; }
+        .history-user::before { content: "👤"; font-size: 0.7rem; }
 
         .history-photo {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 8px;
             object-fit: cover;
             border: 1px solid #e2e8f0;
             background: #f1f5f9;
+            cursor: zoom-in;
         }
 
-        /* ============== ТОСТ ============== */
+        /* ============== ПРОСМОТР ФОТО ============== */
+        .photo-viewer {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.94);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 16px;
+            padding-top: calc(64px + var(--safe-top));
+            padding-bottom: calc(64px + var(--safe-bottom));
+        }
+
+        .photo-viewer.open { display: flex; }
+
+        .photo-viewer img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .photo-viewer-close {
+            position: absolute;
+            top: calc(16px + var(--safe-top));
+            right: 16px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: inherit;
+        }
+
+        .photo-viewer-close:hover { background: rgba(255, 255, 255, 0.25); }
+
         .toast {
             position: fixed;
-            bottom: calc(24px + var(--safe-bottom));
+            bottom: calc(20px + var(--safe-bottom));
             left: 50%;
             transform: translateX(-50%) translateY(20px);
             background: #1e293b;
             color: white;
-            padding: 12px 24px;
+            padding: 10px 20px;
             border-radius: 40px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             opacity: 0;
             pointer-events: none;
             transition: 0.25s ease;
@@ -595,7 +666,6 @@
 
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-        /* ============== ЗАГРУЗКА ============== */
         .loading-overlay {
             position: fixed;
             inset: 0;
@@ -610,8 +680,8 @@
         .loading-overlay.show { display: flex; }
 
         .spinner {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border: 4px solid rgba(30, 41, 59, 0.2);
             border-top-color: #1e293b;
             border-radius: 50%;
@@ -620,7 +690,6 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ============== АДАПТАЦИЯ ============== */
         @media (max-width: 1024px) {
             .departments-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -629,29 +698,41 @@
         }
 
         @media (max-width: 700px) {
-            .top-bar { padding: 10px 12px; gap: 8px; }
-            .user-greeting { font-size: 0.85rem; padding: 6px 12px; max-width: 55%; }
-            .btn-icon { width: 40px; height: 40px; font-size: 1rem; }
+            .top-bar { padding: 6px 10px; }
+            .user-greeting { font-size: 0.78rem; padding: 6px 10px; }
+            .btn-icon { width: 36px; height: 36px; font-size: 0.9rem; }
 
-            .grid-wrapper { padding: 0 12px calc(12px + var(--safe-bottom)); }
+            .search-bar { padding: 0 10px 8px; }
+
+            .grid-wrapper { padding: 0 10px calc(10px + var(--safe-bottom)); }
 
             .departments-grid {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto;
-                gap: 12px;
+                gap: 10px;
             }
 
-            .dept-card { height: 260px; }
+            .dept-card { height: 240px; }
 
-            .modal-panel { max-height: 95vh; border-radius: 20px; }
-            .modal-header { padding: 12px 14px; }
-            .modal-header h2 { font-size: 0.95rem; }
-            .modal-body { padding: 14px; gap: 12px; }
+            .modal-overlay {
+                padding: 6px;
+                padding-top: calc(6px + var(--safe-top));
+                padding-bottom: calc(6px + var(--safe-bottom));
+            }
 
-            .field-row { flex-direction: column; gap: 12px; }
+            .modal-panel {
+                max-height: calc(100dvh - 12px - var(--safe-top) - var(--safe-bottom));
+                border-radius: 16px;
+            }
+
+            .modal-header { padding: 8px 12px; }
+            .modal-header h2 { font-size: 0.85rem; }
+            .modal-body { padding: 12px; gap: 10px; }
+
+            .field-row { flex-direction: column; gap: 10px; }
             .status-choice { flex-direction: column; }
 
-            .history-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .history-header { flex-direction: column; align-items: flex-start; gap: 2px; }
 
             .photo-block { flex-direction: column; align-items: stretch; }
             .photo-preview { width: 100%; height: 140px; }
@@ -664,35 +745,29 @@
 </head>
 <body>
 
-<!-- ЭКРАН ВХОДА / РЕГИСТРАЦИИ -->
+<!-- ЭКРАН ВХОДА -->
 <div class="auth-screen" id="authScreen">
     <div class="auth-card">
         <h1 id="authTitle">Журнал оборудования</h1>
-
         <div class="auth-tabs">
             <button class="auth-tab active" id="tabLogin">Вход</button>
             <button class="auth-tab" id="tabRegister">Регистрация</button>
         </div>
-
         <div class="field">
             <label>ФИО</label>
-            <input type="text" id="authName" autocomplete="off" autocorrect="off" spellcheck="false">
+            <input type="text" id="authName" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
             <div class="autocomplete-list" id="authAutocomplete"></div>
         </div>
-
         <div class="field">
             <label>Пароль</label>
-            <input type="password" id="authPassword" autocomplete="new-password">
+            <input type="password" id="authPassword" autocomplete="off">
         </div>
-
         <div class="field" id="authPassword2Field" style="display:none;">
             <label>Повторите пароль</label>
-            <input type="password" id="authPassword2" autocomplete="new-password">
+            <input type="password" id="authPassword2" autocomplete="off">
         </div>
-
         <div class="auth-error" id="authError"></div>
         <div class="auth-success" id="authSuccess"></div>
-
         <button class="btn btn-primary" id="authSubmit">Войти</button>
     </div>
 </div>
@@ -703,9 +778,12 @@
         <div class="user-greeting" id="userGreeting">—</div>
         <div class="top-actions">
             <button class="btn-icon" id="addBtn" title="Добавить">+</button>
-            <button class="btn-icon" id="refreshBtn" title="Обновить">⟳</button>
             <button class="btn-icon" id="logoutBtn" title="Выйти">⎋</button>
         </div>
+    </div>
+
+    <div class="search-bar">
+        <input type="text" class="search-input" id="searchInput" placeholder="Поиск по всем данным...">
     </div>
 
     <div class="grid-wrapper">
@@ -853,6 +931,12 @@
     </div>
 </div>
 
+<!-- ПРОСМОТР ФОТО -->
+<div class="photo-viewer" id="photoViewer">
+    <button class="photo-viewer-close" id="photoViewerClose">✕</button>
+    <img id="photoViewerImg" alt="">
+</div>
+
 <!-- ТОСТ -->
 <div class="toast" id="toast"></div>
 
@@ -867,7 +951,7 @@
 // ========================================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
-    getDatabase, ref, onValue, set, update, remove, push, get, child
+    getDatabase, ref, onValue, set, update, remove, push, get
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -899,7 +983,7 @@ const ALL_LOCATIONS = [...DEPARTMENTS, REPAIR];
 // ========================================================================
 // СОСТОЯНИЕ
 // ========================================================================
-let equipment = [];
+let equipment = [];        // без фото (только метаданные)
 let history = [];
 let users = [];
 let currentUser = null;
@@ -909,6 +993,8 @@ let pendingMove = null;
 let addPhotoData = '';
 let eqPhotoData = '';
 let movePhotoData = '';
+let currentEqPhoto = '';    // фото текущего открытого оборудования
+let currentSearch = '';
 
 const $ = (id) => document.getElementById(id);
 
@@ -922,7 +1008,7 @@ function uid() {
 function formatTime(ts) {
     const d = ts ? new Date(ts) : new Date();
     const pad = (n) => n.toString().padStart(2, '0');
-    return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 function showToast(msg) {
@@ -947,7 +1033,6 @@ function fillSelect(sel) {
     });
 }
 
-// Простой хеш пароля (не крипто, но для внутреннего инструмента ок)
 async function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password + '_ed_salt_v1');
@@ -956,31 +1041,86 @@ async function hashPassword(password) {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+// Сжатие фото до 800px / JPEG 0.6 (~80-120 КБ)
+function compressImage(file, maxSize = 800, quality = 0.6) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let { width, height } = img;
+                if (width > height && width > maxSize) {
+                    height = (height * maxSize) / width;
+                    width = maxSize;
+                } else if (height > maxSize) {
+                    width = (width * maxSize) / height;
+                    height = maxSize;
+                }
+                canvas.width = width;
+                canvas.height = height;
+                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// ========================================================================
+// ПРОСМОТР ФОТО
+// ========================================================================
+function openPhotoViewer(src) {
+    if (!src) return;
+    $('photoViewerImg').src = src;
+    $('photoViewer').classList.add('open');
+}
+
+function closePhotoViewer() {
+    $('photoViewer').classList.remove('open');
+    $('photoViewerImg').src = '';
+}
+
+// Ленивая загрузка фото по id
+async function loadPhoto(id) {
+    try {
+        const snap = await get(ref(db, 'photos/' + id));
+        return snap.val() || '';
+    } catch (e) {
+        console.warn('photo load error', id, e);
+        return '';
+    }
+}
+
 // ========================================================================
 // FIREBASE — подписки
 // ========================================================================
 function subscribeData() {
+    // Метаданные оборудования (без фото!)
     onValue(ref(db, 'equipment'), (snap) => {
         const val = snap.val();
         equipment = val ? Object.entries(val).map(([id, eq]) => ({ id, ...eq })) : [];
         render();
     });
 
+    // История
     onValue(ref(db, 'history'), (snap) => {
         const val = snap.val();
         history = val ? Object.entries(val).map(([id, h]) => ({ id, ...h })) : [];
     });
-}
 
-async function loadUsers() {
-    const snap = await get(ref(db, 'users'));
-    const val = snap.val();
-    users = val ? Object.entries(val).map(([id, u]) => ({ id, ...u })) : [];
-    return users;
+    // Пользователи (для автодополнения)
+    onValue(ref(db, 'users'), (snap) => {
+        const val = snap.val();
+        users = val ? Object.entries(val).map(([id, u]) => ({ id, ...u })) : [];
+    });
 }
 
 // ========================================================================
-// АВТОРИЗАЦИЯ — экран
+// АВТОРИЗАЦИЯ
 // ========================================================================
 let authMode = 'login';
 
@@ -994,17 +1134,10 @@ function setAuthMode(mode) {
     $('authSuccess').textContent = '';
 }
 
-function showAuthError(msg) {
-    $('authError').textContent = msg;
-    $('authSuccess').textContent = '';
-}
+function showAuthError(msg) { $('authError').textContent = msg; $('authSuccess').textContent = ''; }
+function showAuthSuccess(msg) { $('authSuccess').textContent = msg; $('authError').textContent = ''; }
 
-function showAuthSuccess(msg) {
-    $('authSuccess').textContent = msg;
-    $('authError').textContent = '';
-}
-
-// Автодополнение ФИО из существующих пользователей
+// Автодополнение ФИО — работает и до входа, так как users подписан в onValue
 function setupAutocomplete() {
     const input = $('authName');
     const list = $('authAutocomplete');
@@ -1046,35 +1179,39 @@ async function handleAuth() {
 
     $('authSubmit').disabled = true;
     try {
-        await loadUsers();
-
         if (authMode === 'register') {
             if (pass.length < 4) { showAuthError('Пароль минимум 4 символа'); return; }
             if (pass !== pass2) { showAuthError('Пароли не совпадают'); return; }
-            if (users.some(u => u.fullName.toLowerCase() === name.toLowerCase())) {
-                showAuthError('Пользователь с таким ФИО уже существует');
-                return;
-            }
+            // Проверка существования
+            const usersSnap = await get(ref(db, 'users'));
+            const usersVal = usersSnap.val() || {};
+            const exists = Object.values(usersVal).some(u => 
+                u.fullName && u.fullName.toLowerCase() === name.toLowerCase()
+            );
+            if (exists) { showAuthError('Пользователь уже существует'); return; }
 
             const passHash = await hashPassword(pass);
-            const newUser = {
+            const newRef = push(ref(db, 'users'));
+            await set(newRef, {
                 fullName: name,
                 passHash,
                 createdAt: Date.now()
-            };
-            const newRef = push(ref(db, 'users'));
-            await set(newRef, newUser);
+            });
 
             showAuthSuccess('Аккаунт создан. Входим...');
             currentUser = { id: newRef.key, fullName: name, passHash };
             setTimeout(() => enterApp(), 700);
         } else {
-            const user = users.find(u => u.fullName.toLowerCase() === name.toLowerCase());
-            if (!user) { showAuthError('Пользователь не найден'); return; }
+            const usersSnap = await get(ref(db, 'users'));
+            const usersVal = usersSnap.val() || {};
+            const found = Object.entries(usersVal).find(([id, u]) =>
+                u.fullName && u.fullName.toLowerCase() === name.toLowerCase()
+            );
+            if (!found) { showAuthError('Пользователь не найден'); return; }
+            const [id, user] = found;
             const passHash = await hashPassword(pass);
             if (user.passHash !== passHash) { showAuthError('Неверный пароль'); return; }
-
-            currentUser = { id: user.id, fullName: user.fullName, passHash: user.passHash };
+            currentUser = { id, fullName: user.fullName, passHash: user.passHash };
             enterApp();
         }
     } catch (e) {
@@ -1091,7 +1228,6 @@ function enterApp() {
     $('userGreeting').textContent = currentUser.fullName;
     fillSelect($('addLocation'));
     subscribeData();
-    // сохраняем сессию
     localStorage.setItem('ed_session', JSON.stringify(currentUser));
 }
 
@@ -1213,6 +1349,9 @@ function render() {
     const grid = $('departmentsGrid');
     grid.innerHTML = '';
 
+    const query = currentSearch;
+    const isSearching = query.length > 0;
+
     const grouped = {};
     ALL_LOCATIONS.forEach(loc => grouped[loc] = []);
     equipment.forEach(eq => {
@@ -1220,29 +1359,62 @@ function render() {
         grouped[loc].push(eq);
     });
 
+    if (isSearching) {
+        for (const loc in grouped) {
+            grouped[loc] = grouped[loc].filter(eq => {
+                const str = `${eq.name} ${eq.params} ${eq.status} ${eq.location}`.toLowerCase();
+                return str.includes(query);
+            });
+        }
+    }
+
     const order = [...DEPARTMENTS, REPAIR];
+    let anyVisible = false;
     order.forEach(deptName => {
-        grid.appendChild(renderDept(deptName, grouped[deptName] || [], deptName === REPAIR));
+        const list = grouped[deptName] || [];
+        const isRepair = deptName === REPAIR;
+
+        if (isSearching && list.length === 0) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'dept-card';
+            emptyCell.style.visibility = 'hidden';
+            grid.appendChild(emptyCell);
+            return;
+        }
+        anyVisible = true;
+        grid.appendChild(renderDept(deptName, list, isRepair));
     });
+
+    if (isSearching && !anyVisible) {
+        const empty = document.createElement('div');
+        empty.style.cssText = 'grid-column: 1 / -1; text-align:center; padding:40px; color:#64748b; font-style:italic;';
+        empty.textContent = 'Ничего не найдено';
+        grid.appendChild(empty);
+    }
 }
 
 // ========================================================================
 // МОДАЛКА ПЕРЕМЕЩЕНИЯ
 // ========================================================================
-function openMoveModal() {
+async function openMoveModal() {
     if (!pendingMove) return;
     const eq = equipment.find(x => x.id === pendingMove.id);
     if (!eq) return;
 
-    movePhotoData = eq.photo || '';
-    $('movePhotoPreview').src = movePhotoData || 'https://placehold.co/72x72/e2e8f0/94a3b8?text=%20';
+    // Загружаем текущее фото
+    movePhotoData = '';
+    $('movePhotoPreview').src = 'https://placehold.co/68x68/e2e8f0/94a3b8?text=%20';
+    loadPhoto(eq.id).then(data => {
+        movePhotoData = data || '';
+        if (data) $('movePhotoPreview').src = data;
+    });
+
     $('moveInfo').innerHTML = `<strong>${eq.name}</strong> <span class="arrow">${pendingMove.from} → ${pendingMove.to}</span>`;
 
     const choice = $('moveStatusChoice');
     choice.querySelectorAll('label').forEach(l => {
         l.classList.remove('selected');
-        const val = l.dataset.value;
-        if (val === eq.status) {
+        if (l.dataset.value === eq.status) {
             l.classList.add('selected');
             l.querySelector('input').checked = true;
         }
@@ -1268,59 +1440,34 @@ async function confirmMove() {
     const newStatus = selected.dataset.value;
     const oldLocation = eq.location;
     const oldStatus = eq.status;
-    const oldPhoto = eq.photo || '';
 
     showLoading(true);
     try {
-        const updates = {
-            [`equipment/${eq.id}/location`]: pendingMove.to,
-            [`equipment/${eq.id}/status`]: newStatus
-        };
-        if (movePhotoData && movePhotoData !== oldPhoto) {
-            updates[`equipment/${eq.id}/photo`] = movePhotoData;
-        }
-        await update(ref(db), updates);
-
-        // История — перемещение
-        const historyRef = push(ref(db, 'history'));
-        await set(historyRef, {
-            equipmentId: eq.id,
-            equipmentName: eq.name,
-            type: 'move',
-            from: oldLocation,
-            to: pendingMove.to,
-            user: currentUser.fullName,
-            timestamp: Date.now()
+        // Обновляем метаданные
+        await update(ref(db, 'equipment/' + eq.id), {
+            location: pendingMove.to,
+            status: newStatus
         });
 
-        // История — изменение статуса
-        if (oldStatus !== newStatus) {
-            const hRef2 = push(ref(db, 'history'));
-            await set(hRef2, {
-                equipmentId: eq.id,
-                equipmentName: eq.name,
-                type: 'edit',
-                field: 'status',
-                oldValue: oldStatus,
-                newValue: newStatus,
-                user: currentUser.fullName,
-                timestamp: Date.now()
-            });
+        // Если есть новое фото — сохраняем в photos/{id}
+        if (movePhotoData) {
+            await set(ref(db, 'photos/' + eq.id), movePhotoData);
         }
 
-        // История — фото
-        if (movePhotoData && movePhotoData !== oldPhoto) {
-            const hRef3 = push(ref(db, 'history'));
-            await set(hRef3, {
-                equipmentId: eq.id,
-                equipmentName: eq.name,
-                type: 'edit',
-                field: 'photo',
-                oldValue: 'старое',
-                newValue: 'новое',
-                photo: movePhotoData,
-                user: currentUser.fullName,
-                timestamp: Date.now()
+        // Логи
+        const h1 = push(ref(db, 'history'));
+        await set(h1, {
+            equipmentId: eq.id, equipmentName: eq.name,
+            type: 'move', from: oldLocation, to: pendingMove.to,
+            user: currentUser.fullName, timestamp: Date.now()
+        });
+
+        if (oldStatus !== newStatus) {
+            const h2 = push(ref(db, 'history'));
+            await set(h2, {
+                equipmentId: eq.id, equipmentName: eq.name,
+                type: 'edit', field: 'status', oldValue: oldStatus, newValue: newStatus,
+                user: currentUser.fullName, timestamp: Date.now()
             });
         }
 
@@ -1335,9 +1482,9 @@ async function confirmMove() {
 }
 
 // ========================================================================
-// ИСТОРИЯ
+// ИСТОРИЯ (внутри модалки оборудования)
 // ========================================================================
-function renderHistory(equipmentId) {
+async function renderHistory(equipmentId) {
     const list = $('eqHistoryList');
     list.innerHTML = '';
     const items = history
@@ -1352,7 +1499,7 @@ function renderHistory(equipmentId) {
         return;
     }
 
-    items.forEach(item => {
+    for (const item of items) {
         const el = document.createElement('div');
         el.className = 'history-item';
 
@@ -1393,11 +1540,20 @@ function renderHistory(equipmentId) {
             body.appendChild(route);
         }
 
-        if (item.photo) {
-            const img = document.createElement('img');
-            img.className = 'history-photo';
-            img.src = item.photo;
-            body.appendChild(img);
+        // Фото для этого события (если есть) — по equipmentId на момент события
+        if (item.type === 'move' || item.type === 'edit') {
+            const photoData = await loadPhoto(item.equipmentId);
+            if (photoData) {
+                const img = document.createElement('img');
+                img.className = 'history-photo';
+                img.src = photoData;
+                img.alt = '';
+                img.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openPhotoViewer(photoData);
+                });
+                body.appendChild(img);
+            }
         }
 
         const user = document.createElement('span');
@@ -1408,27 +1564,35 @@ function renderHistory(equipmentId) {
         el.appendChild(header);
         el.appendChild(body);
         list.appendChild(el);
-    });
+    }
 }
 
 // ========================================================================
 // МОДАЛКА ОБОРУДОВАНИЯ
 // ========================================================================
-function openEqModal(id) {
+async function openEqModal(id) {
     const eq = equipment.find(x => x.id === id);
     if (!eq) return;
 
     editingId = id;
-    eqPhotoData = eq.photo || '';
+    eqPhotoData = '';
+    currentEqPhoto = '';
 
     $('eqModalTitle').textContent = eq.name;
     $('eqName').value = eq.name;
     $('eqParams').value = eq.params;
-    $('eqPhotoPreview').src = eq.photo || 'https://placehold.co/72x72/e2e8f0/94a3b8?text=%20';
+    $('eqPhotoPreview').src = 'https://placehold.co/68x68/e2e8f0/94a3b8?text=%20';
 
     fillSelect($('eqLocation'));
     $('eqLocation').value = eq.location;
     $('eqStatus').value = eq.status;
+
+    // Ленивая загрузка фото
+    loadPhoto(id).then(data => {
+        currentEqPhoto = data || '';
+        eqPhotoData = data || '';
+        if (data) $('eqPhotoPreview').src = data;
+    });
 
     renderHistory(id);
     $('equipmentModal').classList.add('open');
@@ -1437,6 +1601,7 @@ function openEqModal(id) {
 function closeEqModal() {
     $('equipmentModal').classList.remove('open');
     editingId = null;
+    currentEqPhoto = '';
 }
 
 async function saveEq() {
@@ -1455,16 +1620,18 @@ async function saveEq() {
 
     showLoading(true);
     try {
-        const updates = {
-            [`equipment/${eq.id}/name`]: newName,
-            [`equipment/${eq.id}/params`]: newParams,
-            [`equipment/${eq.id}/location`]: newLoc,
-            [`equipment/${eq.id}/status`]: newStatus,
-            [`equipment/${eq.id}/photo`]: newPhoto
-        };
-        await update(ref(db), updates);
+        await update(ref(db, 'equipment/' + eq.id), {
+            name: newName,
+            params: newParams,
+            location: newLoc,
+            status: newStatus
+        });
 
-        // Логируем историю
+        if (newPhoto !== currentEqPhoto) {
+            await set(ref(db, 'photos/' + eq.id), newPhoto);
+        }
+
+        // Логи
         if (eq.location !== newLoc) {
             const r = push(ref(db, 'history'));
             await set(r, {
@@ -1497,14 +1664,6 @@ async function saveEq() {
                 user: currentUser.fullName, timestamp: Date.now()
             });
         }
-        if ((eq.photo || '') !== newPhoto) {
-            const r = push(ref(db, 'history'));
-            await set(r, {
-                equipmentId: eq.id, equipmentName: newName,
-                type: 'edit', field: 'photo', oldValue: 'старое', newValue: 'новое',
-                photo: newPhoto, user: currentUser.fullName, timestamp: Date.now()
-            });
-        }
 
         showToast('Сохранено');
         closeEqModal();
@@ -1525,6 +1684,7 @@ async function deleteEq() {
     showLoading(true);
     try {
         await remove(ref(db, 'equipment/' + eq.id));
+        await remove(ref(db, 'photos/' + eq.id));
         const r = push(ref(db, 'history'));
         await set(r, {
             equipmentId: eq.id, equipmentName: eq.name,
@@ -1547,7 +1707,7 @@ function openAddModal() {
     addPhotoData = '';
     $('addName').value = '';
     $('addParams').value = '';
-    $('addPhotoPreview').src = 'https://placehold.co/72x72/e2e8f0/94a3b8?text=%20';
+    $('addPhotoPreview').src = 'https://placehold.co/68x68/e2e8f0/94a3b8?text=%20';
     fillSelect($('addLocation'));
     $('addLocation').value = DEPARTMENTS[0];
     $('addStatus').value = 'рабочий';
@@ -1572,16 +1732,18 @@ async function saveAdd() {
         const id = newRef.key;
         await set(newRef, {
             name, params, location: loc, status,
-            photo: addPhotoData || '',
             createdAt: Date.now(),
             createdBy: currentUser.fullName
         });
+
+        if (addPhotoData) {
+            await set(ref(db, 'photos/' + id), addPhotoData);
+        }
 
         const r = push(ref(db, 'history'));
         await set(r, {
             equipmentId: id, equipmentName: name,
             type: 'add', to: loc,
-            photo: addPhotoData || null,
             user: currentUser.fullName, timestamp: Date.now()
         });
 
@@ -1595,7 +1757,7 @@ async function saveAdd() {
 }
 
 // ========================================================================
-// ФОТО (пока base64, позже заменим на R2)
+// ФОТО (сжатие + превью + клик для просмотра)
 // ========================================================================
 function setupPhoto(inputId, btnId, galleryBtnId, previewId, callback) {
     const input = $(inputId);
@@ -1611,29 +1773,26 @@ function setupPhoto(inputId, btnId, galleryBtnId, previewId, callback) {
         input.removeAttribute('capture');
         input.click();
     });
-    input.addEventListener('change', (e) => {
+    input.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            // Сжимаем
-            const img = new Image();
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                let w = img.width, h = img.height;
-                const max = 1024;
-                if (w > h && w > max) { h = (h * max) / w; w = max; }
-                else if (h > max) { w = (w * max) / h; h = max; }
-                canvas.width = w; canvas.height = h;
-                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
-                callback(dataUrl);
-                preview.src = dataUrl;
-            };
-            img.src = ev.target.result;
-        };
-        reader.readAsDataURL(file);
+        try {
+            const dataUrl = await compressImage(file, 800, 0.6);
+            callback(dataUrl);
+            preview.src = dataUrl;
+        } catch (err) {
+            console.error(err);
+            showToast('Ошибка обработки фото');
+        }
         input.value = '';
+    });
+
+    // Клик по превью — открыть полноэкранно
+    preview.style.cursor = 'zoom-in';
+    preview.addEventListener('click', () => {
+        if (preview.src && !preview.src.startsWith('https://placehold.co')) {
+            openPhotoViewer(preview.src);
+        }
     });
 }
 
@@ -1641,7 +1800,6 @@ function setupPhoto(inputId, btnId, galleryBtnId, previewId, callback) {
 // ИНИЦИАЛИЗАЦИЯ
 // ========================================================================
 function init() {
-    // Вкладки
     $('tabLogin').addEventListener('click', () => setAuthMode('login'));
     $('tabRegister').addEventListener('click', () => setAuthMode('register'));
 
@@ -1651,12 +1809,15 @@ function init() {
     $('authPassword').addEventListener('keypress', (e) => { if (e.key === 'Enter') authMode === 'register' ? $('authPassword2').focus() : handleAuth(); });
     $('authPassword2').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleAuth(); });
 
-    // Кнопки приложения
+    // Поиск
+    $('searchInput').addEventListener('input', (e) => {
+        currentSearch = e.target.value.trim().toLowerCase();
+        render();
+    });
+
     $('addBtn').addEventListener('click', openAddModal);
     $('logoutBtn').addEventListener('click', () => { if (confirm('Выйти?')) logout(); });
-    $('refreshBtn').addEventListener('click', () => { subscribeData(); showToast('Обновлено'); });
 
-    // Модалки
     $('addCancelBtn').addEventListener('click', closeAddModal);
     $('addSaveBtn').addEventListener('click', saveAdd);
     $('eqCancelBtn').addEventListener('click', closeEqModal);
@@ -1673,12 +1834,18 @@ function init() {
         label.querySelector('input').checked = true;
     });
 
-    // Закрытие по фону
+    // Просмотр фото
+    $('photoViewerClose').addEventListener('click', closePhotoViewer);
+    $('photoViewer').addEventListener('click', (e) => {
+        if (e.target === $('photoViewer')) closePhotoViewer();
+    });
+
+    // Закрытие модалок по фону
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
                 overlay.classList.remove('open');
-                if (overlay.id === 'equipmentModal') editingId = null;
+                if (overlay.id === 'equipmentModal') { editingId = null; currentEqPhoto = ''; }
                 if (overlay.id === 'moveModal') { pendingMove = null; movePhotoData = ''; }
             }
         });
@@ -1686,8 +1853,9 @@ function init() {
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
+            if ($('photoViewer').classList.contains('open')) { closePhotoViewer(); return; }
             document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
-            editingId = null; pendingMove = null; movePhotoData = '';
+            editingId = null; pendingMove = null; movePhotoData = ''; currentEqPhoto = '';
         }
     });
 
@@ -1702,6 +1870,12 @@ function init() {
             draggedId = null;
             document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
         }
+    });
+
+    // Подписка на users нужна ещё до входа — для автодополнения
+    onValue(ref(db, 'users'), (snap) => {
+        const val = snap.val();
+        users = val ? Object.entries(val).map(([id, u]) => ({ id, ...u })) : [];
     });
 
     // Восстановление сессии
