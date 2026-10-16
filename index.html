@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0">
     <meta name="theme-color" content="#1e293b">
     
     <link rel="manifest" href="manifest.json">
@@ -23,9 +23,22 @@
             --safe-bottom: env(safe-area-inset-bottom, 0px);
             --safe-left: env(safe-area-inset-left, 0px);
             --safe-right: env(safe-area-inset-right, 0px);
+            --c-blue: #2563eb;
+            --c-blue-light: #dbeafe;
+            --c-green: #16a34a;
+            --c-green-light: #dcfce7;
+            --c-red: #dc2626;
+            --c-red-light: #fee2e2;
+            --c-gray: #64748b;
+            --c-gray-light: #f1f5f9;
         }
 
-        html, body { height: 100%; overflow: hidden; }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            touch-action: pan-y;
+            -webkit-text-size-adjust: 100%;
+        }
 
         body {
             background-color: #b8c4d4;
@@ -114,6 +127,7 @@
             color: #0f172a;
             min-height: 48px;
             width: 100%;
+            font-size: 16px;
         }
 
         .field input:focus, .field select:focus {
@@ -139,6 +153,9 @@
 
         .btn-outline { background: #ffffff; color: #1e293b; border: 1px solid #94a3b8; }
         .btn-outline:hover { background: #f1f5f9; }
+
+        .btn-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .btn-danger:hover { background: #fecaca; }
 
         .auth-error { color: #991b1b; font-size: 0.85rem; text-align: center; min-height: 20px; }
         .auth-success { color: #166534; font-size: 0.85rem; text-align: center; min-height: 20px; }
@@ -203,7 +220,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 50%;
+            max-width: 45%;
         }
 
         .top-actions { display: flex; gap: 6px; align-items: center; }
@@ -226,7 +243,6 @@
         }
 
         .btn-icon:hover { background: #f1f5f9; }
-        .btn-icon:disabled { opacity: 0.5; cursor: wait; }
 
         .search-bar {
             padding: 0 12px 10px;
@@ -240,7 +256,7 @@
             border: 1px solid #94a3b8;
             border-radius: 40px;
             background: #ffffff;
-            font-size: 0.9rem;
+            font-size: 16px;
             outline: none;
             font-family: inherit;
             color: #0f172a;
@@ -409,7 +425,7 @@
             border-radius: 20px;
             box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             border: 1px solid #cbd5e1;
             display: flex;
             flex-direction: column;
@@ -420,61 +436,142 @@
 
         .modal-panel.wide { max-width: 640px; }
 
+        /* Красивый хедер модалки */
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 8px;
-            padding: 10px 14px;
+            padding: 12px 16px;
             border-bottom: 1px solid #e2e8f0;
-            background: #f8fafc;
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
             flex-shrink: 0;
         }
 
         .modal-header h2 {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: #0f172a;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            flex: 1;
+            min-width: 0;
         }
 
         .modal-header-actions { display: flex; gap: 6px; flex-shrink: 0; }
 
         .modal-header-actions .btn {
-            padding: 6px 12px;
+            padding: 7px 12px;
             font-size: 0.78rem;
             min-height: 34px;
+            white-space: nowrap;
         }
 
         .modal-body {
-            padding: 14px;
+            padding: 16px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 16px;
             min-height: 0;
             -webkit-overflow-scrolling: touch;
+        }
+
+        /* Секции модалки */
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-section-title {
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed #e2e8f0;
         }
 
         .field-row { display: flex; gap: 10px; }
         .field-row .field { flex: 1; }
 
+        /* Красивые кнопки-чипы для локации и статуса */
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 30px;
+            border: 1.5px solid #cbd5e1;
+            background: #f8fafc;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #475569;
+            cursor: pointer;
+            user-select: none;
+            transition: 0.15s;
+            font-family: inherit;
+        }
+
+        .chip:hover { background: #f1f5f9; }
+
+        .chip.selected {
+            background: #1e293b;
+            color: white;
+            border-color: #1e293b;
+            box-shadow: 0 2px 8px rgba(30, 41, 59, 0.3);
+        }
+
+        .chip.selected.location-chip {
+            background: #2563eb;
+            border-color: #2563eb;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .chip.selected.status-working {
+            background: #16a34a;
+            border-color: #16a34a;
+            box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3);
+        }
+
+        .chip.selected.status-broken {
+            background: #dc2626;
+            border-color: #dc2626;
+            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+        }
+
+        .chip.selected.status-repair {
+            background: #991b1b;
+            border-color: #991b1b;
+            box-shadow: 0 2px 8px rgba(153, 27, 27, 0.3);
+        }
+
+        .chip-icon { font-size: 0.9rem; }
+
+        /* Фото-блок */
         .photo-block {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
-            padding: 10px;
-            border-radius: 12px;
-            border: 1px dashed #cbd5e1;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1.5px dashed #cbd5e1;
             background: #f8fafc;
         }
 
         .photo-preview {
-            width: 68px;
-            height: 68px;
-            border-radius: 10px;
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
             object-fit: cover;
             background: #e2e8f0;
             flex-shrink: 0;
@@ -485,119 +582,164 @@
         .photo-actions { display: flex; flex-direction: column; gap: 6px; flex: 1; }
 
         .photo-actions .btn {
-            padding: 7px 12px;
-            font-size: 0.78rem;
+            padding: 8px 12px;
+            font-size: 0.8rem;
             width: 100%;
-            min-height: 36px;
+            min-height: 38px;
         }
 
-        .status-choice { display: flex; gap: 8px; }
+        /* История — как мессенджер */
+        .history-list { display: flex; flex-direction: column; gap: 10px; }
 
-        .status-choice label {
+        .chat-msg {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .chat-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.78rem;
+            flex-shrink: 0;
+            text-transform: uppercase;
+        }
+
+        .chat-content {
             flex: 1;
-            padding: 10px;
-            border-radius: 12px;
-            border: 1px solid #94a3b8;
-            text-align: center;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            user-select: none;
-            transition: 0.15s;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .status-choice input[type="radio"] { display: none; }
-
-        .status-choice label.working-choice { background: #dcfce7; border-color: #86efac; color: #166534; }
-        .status-choice label.working-choice.selected { background: #86efac; border-color: #166534; }
-        .status-choice label.broken-choice { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
-        .status-choice label.broken-choice.selected { background: #fca5a5; border-color: #991b1b; }
-
-        .move-info {
-            font-size: 0.82rem;
-            color: #475569;
-            background: #f8fafc;
-            padding: 10px 12px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
+        .chat-meta {
             display: flex;
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
+            font-size: 0.75rem;
         }
 
-        .move-info .arrow { color: #64748b; font-weight: 600; }
-
-        .equipment-history-title {
-            font-size: 0.82rem;
+        .chat-author {
             font-weight: 600;
-            color: #475569;
-            margin-top: 4px;
-            padding-top: 10px;
-            border-top: 1px solid #e2e8f0;
+            color: #0f172a;
+            font-size: 0.82rem;
         }
 
-        .history-list { display: flex; flex-direction: column; gap: 6px; }
+        .chat-time { font-size: 0.7rem; color: #94a3b8; }
 
-        .history-item {
+        .chat-bubble {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px 14px 14px 14px;
+            padding: 10px 14px;
+            font-size: 0.82rem;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+
+        .chat-bubble.type-move {
+            background: #dbeafe;
+            border-color: #93c5fd;
+        }
+
+        .chat-bubble.type-add {
+            background: #dcfce7;
+            border-color: #86efac;
+        }
+
+        .chat-bubble.type-archive {
+            background: #fee2e2;
+            border-color: #fca5a5;
+        }
+
+        .chat-bubble.type-edit {
+            background: #f1f5f9;
+            border-color: #e2e8f0;
+        }
+
+        .chat-action-title {
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .chat-route {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.82rem;
+            align-self: flex-start;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .chat-route .arrow { color: #2563eb; font-weight: 700; }
+
+        .chat-photo {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 10px;
+            object-fit: cover;
+            cursor: zoom-in;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        /* ============== АРХИВ ============== */
+        .archive-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .archive-item {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 8px 12px;
-            font-size: 0.78rem;
+            border-radius: 14px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .history-header {
+        .archive-item-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
+            align-items: flex-start;
+            gap: 10px;
             flex-wrap: wrap;
         }
 
-        .history-action { font-weight: 600; color: #0f172a; font-size: 0.78rem; }
-        .history-time { font-size: 0.68rem; color: #94a3b8; white-space: nowrap; }
+        .archive-item-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #0f172a;
+        }
 
-        .history-body {
+        .archive-item-meta {
+            font-size: 0.72rem;
+            color: #64748b;
             display: flex;
-            flex-wrap: wrap;
-            gap: 6px 10px;
-            align-items: center;
+            flex-direction: column;
+            gap: 2px;
         }
 
-        .history-route {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #ffffff;
-            padding: 3px 10px;
-            border-radius: 30px;
-            border: 1px solid #e2e8f0;
-            font-weight: 500;
-            font-size: 0.72rem;
-        }
-
-        .history-route .arrow { color: #64748b; font-weight: 600; }
-
-        .history-user {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+        .archive-item-info {
+            font-size: 0.78rem;
             color: #475569;
-            font-size: 0.72rem;
-        }
-
-        .history-user::before { content: "👤"; font-size: 0.7rem; }
-
-        .history-photo {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 1px solid #e2e8f0;
-            background: #f1f5f9;
-            cursor: zoom-in;
         }
 
         /* ============== ПРОСМОТР ФОТО ============== */
@@ -612,6 +754,7 @@
             padding: 16px;
             padding-top: calc(64px + var(--safe-top));
             padding-bottom: calc(64px + var(--safe-bottom));
+            touch-action: pinch-zoom;
         }
 
         .photo-viewer.open { display: flex; }
@@ -623,6 +766,7 @@
             border-radius: 8px;
             user-select: none;
             -webkit-user-drag: none;
+            touch-action: pinch-zoom;
         }
 
         .photo-viewer-close {
@@ -700,7 +844,7 @@
         @media (max-width: 700px) {
             .top-bar { padding: 6px 10px; }
             .user-greeting { font-size: 0.78rem; padding: 6px 10px; }
-            .btn-icon { width: 36px; height: 36px; font-size: 0.9rem; }
+            .btn-icon { width: 38px; height: 38px; font-size: 0.95rem; }
 
             .search-bar { padding: 0 10px 8px; }
 
@@ -725,21 +869,20 @@
                 border-radius: 16px;
             }
 
-            .modal-header { padding: 8px 12px; }
-            .modal-header h2 { font-size: 0.85rem; }
-            .modal-body { padding: 12px; gap: 10px; }
+            .modal-header { padding: 10px 12px; }
+            .modal-header h2 { font-size: 0.88rem; }
+            .modal-body { padding: 12px; gap: 14px; }
 
             .field-row { flex-direction: column; gap: 10px; }
-            .status-choice { flex-direction: column; }
-
-            .history-header { flex-direction: column; align-items: flex-start; gap: 2px; }
 
             .photo-block { flex-direction: column; align-items: stretch; }
-            .photo-preview { width: 100%; height: 140px; }
+            .photo-preview { width: 100%; height: 160px; }
             .photo-actions { flex-direction: row; }
             .photo-actions .btn { flex: 1; }
 
             .auth-card { padding: 24px 20px; }
+
+            .chat-photo { max-width: 160px; max-height: 160px; }
         }
     </style>
 </head>
@@ -778,6 +921,7 @@
         <div class="user-greeting" id="userGreeting">—</div>
         <div class="top-actions">
             <button class="btn-icon" id="addBtn" title="Добавить">+</button>
+            <button class="btn-icon" id="archiveBtn" title="Архив">🗄</button>
             <button class="btn-icon" id="logoutBtn" title="Выйти">⎋</button>
         </div>
     </div>
@@ -802,29 +946,33 @@
             </div>
         </div>
         <div class="modal-body">
-            <div class="field">
-                <label>Наименование</label>
-                <input type="text" id="addName" placeholder="Например: АИР 120" autocomplete="off">
-            </div>
-            <div class="field">
-                <label>Параметры</label>
-                <input type="text" id="addParams" placeholder="Мощность, обороты и т.д." autocomplete="off">
-            </div>
-            <div class="field-row">
+            <div class="form-section">
+                <div class="form-section-title">Основное</div>
                 <div class="field">
-                    <label>Местонахождение</label>
-                    <select id="addLocation"></select>
+                    <label>Наименование</label>
+                    <input type="text" id="addName" placeholder="Например: АИР 120" autocomplete="off">
                 </div>
                 <div class="field">
-                    <label>Статус</label>
-                    <select id="addStatus">
-                        <option value="рабочий">рабочий</option>
-                        <option value="не рабочий">не рабочий</option>
-                    </select>
+                    <label>Параметры</label>
+                    <input type="text" id="addParams" placeholder="Мощность, обороты и т.д." autocomplete="off">
                 </div>
             </div>
-            <div class="field">
-                <label>Фото</label>
+
+            <div class="form-section">
+                <div class="form-section-title">Местонахождение</div>
+                <div class="chip-group" id="addLocationChips"></div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-title">Статус</div>
+                <div class="chip-group" id="addStatusChips">
+                    <button type="button" class="chip status-working" data-value="рабочий"><span class="chip-icon">✓</span> Рабочий</button>
+                    <button type="button" class="chip status-broken" data-value="не рабочий"><span class="chip-icon">✕</span> Не рабочий</button>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-title">Фото</div>
                 <div class="photo-block">
                     <img id="addPhotoPreview" class="photo-preview" alt="">
                     <div class="photo-actions">
@@ -844,13 +992,14 @@
         <div class="modal-header">
             <h2 id="eqModalTitle">Оборудование</h2>
             <div class="modal-header-actions">
+                <button class="btn btn-danger" id="eqArchiveBtn">🗄 В архив</button>
                 <button class="btn btn-outline" id="eqCancelBtn">Отмена</button>
                 <button class="btn btn-primary" id="eqSaveBtn">Сохранить</button>
             </div>
         </div>
         <div class="modal-body">
-            <div class="field">
-                <label>Фото</label>
+            <div class="form-section">
+                <div class="form-section-title">Фото</div>
                 <div class="photo-block">
                     <img id="eqPhotoPreview" class="photo-preview" alt="">
                     <div class="photo-actions">
@@ -860,33 +1009,36 @@
                     </div>
                 </div>
             </div>
-            <div class="field">
-                <label>Наименование</label>
-                <input type="text" id="eqName" autocomplete="off">
-            </div>
-            <div class="field">
-                <label>Параметры</label>
-                <input type="text" id="eqParams" autocomplete="off">
-            </div>
-            <div class="field-row">
+
+            <div class="form-section">
+                <div class="form-section-title">Основное</div>
                 <div class="field">
-                    <label>Местонахождение</label>
-                    <select id="eqLocation"></select>
+                    <label>Наименование</label>
+                    <input type="text" id="eqName" autocomplete="off">
                 </div>
                 <div class="field">
-                    <label>Статус</label>
-                    <select id="eqStatus">
-                        <option value="рабочий">рабочий</option>
-                        <option value="не рабочий">не рабочий</option>
-                    </select>
+                    <label>Параметры</label>
+                    <input type="text" id="eqParams" autocomplete="off">
                 </div>
-            </div>
-            <div style="display:flex; justify-content: flex-end;">
-                <button class="btn btn-outline" id="eqDeleteBtn" style="color:#991b1b; border-color:#fca5a5;">Удалить</button>
             </div>
 
-            <div class="equipment-history-title">История перемещений</div>
-            <div class="history-list" id="eqHistoryList"></div>
+            <div class="form-section">
+                <div class="form-section-title">Местонахождение</div>
+                <div class="chip-group" id="eqLocationChips"></div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-title">Статус</div>
+                <div class="chip-group" id="eqStatusChips">
+                    <button type="button" class="chip status-working" data-value="рабочий"><span class="chip-icon">✓</span> Рабочий</button>
+                    <button type="button" class="chip status-broken" data-value="не рабочий"><span class="chip-icon">✕</span> Не рабочий</button>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="form-section-title">История перемещений</div>
+                <div class="history-list" id="eqHistoryList"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -903,21 +1055,17 @@
         </div>
         <div class="modal-body">
             <div class="move-info" id="moveInfo"></div>
-            <div class="field">
-                <label>Статус оборудования</label>
-                <div class="status-choice" id="moveStatusChoice">
-                    <label class="working-choice" data-value="рабочий">
-                        <input type="radio" name="moveStatus" value="рабочий">
-                        <span>рабочий</span>
-                    </label>
-                    <label class="broken-choice" data-value="не рабочий">
-                        <input type="radio" name="moveStatus" value="не рабочий">
-                        <span>не рабочий</span>
-                    </label>
+
+            <div class="form-section">
+                <div class="form-section-title">Новый статус</div>
+                <div class="chip-group" id="moveStatusChips">
+                    <button type="button" class="chip status-working" data-value="рабочий"><span class="chip-icon">✓</span> Рабочий</button>
+                    <button type="button" class="chip status-broken" data-value="не рабочий"><span class="chip-icon">✕</span> Не рабочий</button>
                 </div>
             </div>
-            <div class="field">
-                <label>Фото (при необходимости)</label>
+
+            <div class="form-section">
+                <div class="form-section-title">Фото (при необходимости)</div>
                 <div class="photo-block">
                     <img id="movePhotoPreview" class="photo-preview" alt="">
                     <div class="photo-actions">
@@ -927,6 +1075,21 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- МОДАЛКА АРХИВА -->
+<div class="modal-overlay" id="archiveModal">
+    <div class="modal-panel wide">
+        <div class="modal-header">
+            <h2>Архив</h2>
+            <div class="modal-header-actions">
+                <button class="btn btn-outline" id="archiveCloseBtn">Закрыть</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="archive-list" id="archiveList"></div>
         </div>
     </div>
 </div>
@@ -946,9 +1109,6 @@
 </div>
 
 <script type="module">
-// ========================================================================
-// FIREBASE
-// ========================================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
     getDatabase, ref, onValue, set, update, remove, push, get
@@ -967,9 +1127,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// ========================================================================
-// КОНСТАНТЫ
-// ========================================================================
 const DEPARTMENTS = [
     'Альметьевский Цех',
     'Джалильский Цех',
@@ -980,10 +1137,8 @@ const DEPARTMENTS = [
 const REPAIR = 'Ремонт';
 const ALL_LOCATIONS = [...DEPARTMENTS, REPAIR];
 
-// ========================================================================
-// СОСТОЯНИЕ
-// ========================================================================
-let equipment = [];        // без фото (только метаданные)
+// ======================== СОСТОЯНИЕ ========================
+let equipment = [];         // метаданные, включая archived
 let history = [];
 let users = [];
 let currentUser = null;
@@ -993,14 +1148,19 @@ let pendingMove = null;
 let addPhotoData = '';
 let eqPhotoData = '';
 let movePhotoData = '';
-let currentEqPhoto = '';    // фото текущего открытого оборудования
+let currentEqPhoto = '';
 let currentSearch = '';
+
+// Выбранные значения для чипов
+let addLocationValue = DEPARTMENTS[0];
+let addStatusValue = 'рабочий';
+let eqLocationValue = '';
+let eqStatusValue = 'рабочий';
+let moveStatusValue = 'рабочий';
 
 const $ = (id) => document.getElementById(id);
 
-// ========================================================================
-// УТИЛИТЫ
-// ========================================================================
+// ======================== УТИЛИТЫ ========================
 function uid() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
@@ -1009,6 +1169,11 @@ function formatTime(ts) {
     const d = ts ? new Date(ts) : new Date();
     const pad = (n) => n.toString().padStart(2, '0');
     return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function initials(fullName) {
+    if (!fullName) return '?';
+    return fullName.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
 }
 
 function showToast(msg) {
@@ -1023,16 +1188,6 @@ function showLoading(v) {
     $('loading').classList.toggle('show', v);
 }
 
-function fillSelect(sel) {
-    sel.innerHTML = '';
-    ALL_LOCATIONS.forEach(loc => {
-        const opt = document.createElement('option');
-        opt.value = loc;
-        opt.textContent = loc;
-        sel.appendChild(opt);
-    });
-}
-
 async function hashPassword(password) {
     const encoder = new TextEncoder();
     const data = encoder.encode(password + '_ed_salt_v1');
@@ -1041,7 +1196,7 @@ async function hashPassword(password) {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Сжатие фото до 800px / JPEG 0.6 (~80-120 КБ)
+// Сжатие фото 800px / 0.6
 function compressImage(file, maxSize = 800, quality = 0.6) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -1070,9 +1225,7 @@ function compressImage(file, maxSize = 800, quality = 0.6) {
     });
 }
 
-// ========================================================================
-// ПРОСМОТР ФОТО
-// ========================================================================
+// ======================== ПРОСМОТР ФОТО ========================
 function openPhotoViewer(src) {
     if (!src) return;
     $('photoViewerImg').src = src;
@@ -1084,7 +1237,6 @@ function closePhotoViewer() {
     $('photoViewerImg').src = '';
 }
 
-// Ленивая загрузка фото по id
 async function loadPhoto(id) {
     try {
         const snap = await get(ref(db, 'photos/' + id));
@@ -1095,33 +1247,64 @@ async function loadPhoto(id) {
     }
 }
 
-// ========================================================================
-// FIREBASE — подписки
-// ========================================================================
+// ======================== ЧИПЫ (локация / статус) ========================
+function renderLocationChips(container, selectedValue, onSelect) {
+    container.innerHTML = '';
+    ALL_LOCATIONS.forEach(loc => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'chip location-chip' + (loc === selectedValue ? ' selected' : '');
+        chip.innerHTML = `<span class="chip-icon">📍</span> ${loc}`;
+        chip.addEventListener('click', () => {
+            container.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+            chip.classList.add('selected');
+            onSelect(loc);
+        });
+        container.appendChild(chip);
+    });
+}
+
+function renderStatusChips(container, selectedValue, onSelect) {
+    container.innerHTML = '';
+    const statuses = [
+        { value: 'рабочий', label: 'Рабочий', icon: '✓', cls: 'status-working' },
+        { value: 'не рабочий', label: 'Не рабочий', icon: '✕', cls: 'status-broken' }
+    ];
+    statuses.forEach(s => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'chip ' + s.cls + (s.value === selectedValue ? ' selected' : '');
+        chip.innerHTML = `<span class="chip-icon">${s.icon}</span> ${s.label}`;
+        chip.addEventListener('click', () => {
+            container.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+            chip.classList.add('selected');
+            onSelect(s.value);
+        });
+        container.appendChild(chip);
+    });
+}
+
+// ======================== ПОДПИСКИ FIREBASE ========================
 function subscribeData() {
-    // Метаданные оборудования (без фото!)
+    // Только НЕархивные для главного экрана
     onValue(ref(db, 'equipment'), (snap) => {
         const val = snap.val();
         equipment = val ? Object.entries(val).map(([id, eq]) => ({ id, ...eq })) : [];
         render();
     });
 
-    // История
     onValue(ref(db, 'history'), (snap) => {
         const val = snap.val();
         history = val ? Object.entries(val).map(([id, h]) => ({ id, ...h })) : [];
     });
 
-    // Пользователи (для автодополнения)
     onValue(ref(db, 'users'), (snap) => {
         const val = snap.val();
         users = val ? Object.entries(val).map(([id, u]) => ({ id, ...u })) : [];
     });
 }
 
-// ========================================================================
-// АВТОРИЗАЦИЯ
-// ========================================================================
+// ======================== АВТОРИЗАЦИЯ ========================
 let authMode = 'login';
 
 function setAuthMode(mode) {
@@ -1137,7 +1320,6 @@ function setAuthMode(mode) {
 function showAuthError(msg) { $('authError').textContent = msg; $('authSuccess').textContent = ''; }
 function showAuthSuccess(msg) { $('authSuccess').textContent = msg; $('authError').textContent = ''; }
 
-// Автодополнение ФИО — работает и до входа, так как users подписан в onValue
 function setupAutocomplete() {
     const input = $('authName');
     const list = $('authAutocomplete');
@@ -1176,13 +1358,11 @@ async function handleAuth() {
     const pass2 = $('authPassword2').value;
 
     if (!name || !pass) { showAuthError('Заполните все поля'); return; }
-
     $('authSubmit').disabled = true;
     try {
         if (authMode === 'register') {
             if (pass.length < 4) { showAuthError('Пароль минимум 4 символа'); return; }
             if (pass !== pass2) { showAuthError('Пароли не совпадают'); return; }
-            // Проверка существования
             const usersSnap = await get(ref(db, 'users'));
             const usersVal = usersSnap.val() || {};
             const exists = Object.values(usersVal).some(u => 
@@ -1192,11 +1372,7 @@ async function handleAuth() {
 
             const passHash = await hashPassword(pass);
             const newRef = push(ref(db, 'users'));
-            await set(newRef, {
-                fullName: name,
-                passHash,
-                createdAt: Date.now()
-            });
+            await set(newRef, { fullName: name, passHash, createdAt: Date.now() });
 
             showAuthSuccess('Аккаунт создан. Входим...');
             currentUser = { id: newRef.key, fullName: name, passHash };
@@ -1226,7 +1402,6 @@ function enterApp() {
     $('authScreen').style.display = 'none';
     $('app').classList.add('active');
     $('userGreeting').textContent = currentUser.fullName;
-    fillSelect($('addLocation'));
     subscribeData();
     localStorage.setItem('ed_session', JSON.stringify(currentUser));
 }
@@ -1242,15 +1417,12 @@ function logout() {
     $('authSuccess').textContent = '';
 }
 
-// ========================================================================
-// РЕНДЕР
-// ========================================================================
+// ======================== РЕНДЕР ========================
 function renderEqCard(eq) {
     const card = document.createElement('div');
     card.className = 'equipment-card ' + (eq.status === 'рабочий' ? 'status-working' : 'status-broken');
     card.draggable = true;
     card.dataset.id = eq.id;
-    card.dataset.location = eq.location;
 
     const info = document.createElement('div');
     info.className = 'equipment-info';
@@ -1296,7 +1468,6 @@ function renderEqCard(eq) {
 function renderDept(deptName, list, isRepair) {
     const card = document.createElement('div');
     card.className = 'dept-card' + (isRepair ? ' repair-card' : '');
-    card.dataset.department = deptName;
 
     const title = document.createElement('div');
     title.className = 'dept-title';
@@ -1352,9 +1523,12 @@ function render() {
     const query = currentSearch;
     const isSearching = query.length > 0;
 
+    // Только НЕ архивные
+    const active = equipment.filter(e => !e.archived);
+
     const grouped = {};
     ALL_LOCATIONS.forEach(loc => grouped[loc] = []);
-    equipment.forEach(eq => {
+    active.forEach(eq => {
         const loc = grouped[eq.location] ? eq.location : REPAIR;
         grouped[loc].push(eq);
     });
@@ -1393,17 +1567,14 @@ function render() {
     }
 }
 
-// ========================================================================
-// МОДАЛКА ПЕРЕМЕЩЕНИЯ
-// ========================================================================
+// ======================== МОДАЛКА ПЕРЕМЕЩЕНИЯ ========================
 async function openMoveModal() {
     if (!pendingMove) return;
     const eq = equipment.find(x => x.id === pendingMove.id);
     if (!eq) return;
 
-    // Загружаем текущее фото
     movePhotoData = '';
-    $('movePhotoPreview').src = 'https://placehold.co/68x68/e2e8f0/94a3b8?text=%20';
+    $('movePhotoPreview').src = 'https://placehold.co/80x80/e2e8f0/94a3b8?text=%20';
     loadPhoto(eq.id).then(data => {
         movePhotoData = data || '';
         if (data) $('movePhotoPreview').src = data;
@@ -1411,14 +1582,8 @@ async function openMoveModal() {
 
     $('moveInfo').innerHTML = `<strong>${eq.name}</strong> <span class="arrow">${pendingMove.from} → ${pendingMove.to}</span>`;
 
-    const choice = $('moveStatusChoice');
-    choice.querySelectorAll('label').forEach(l => {
-        l.classList.remove('selected');
-        if (l.dataset.value === eq.status) {
-            l.classList.add('selected');
-            l.querySelector('input').checked = true;
-        }
-    });
+    moveStatusValue = eq.status;
+    renderStatusChips($('moveStatusChips'), moveStatusValue, (v) => { moveStatusValue = v; });
 
     $('moveModal').classList.add('open');
 }
@@ -1434,40 +1599,48 @@ async function confirmMove() {
     const eq = equipment.find(x => x.id === pendingMove.id);
     if (!eq) { closeMoveModal(); return; }
 
-    const selected = $('moveStatusChoice').querySelector('label.selected');
-    if (!selected) { showToast('Выберите статус'); return; }
-
-    const newStatus = selected.dataset.value;
+    const newStatus = moveStatusValue;
     const oldLocation = eq.location;
     const oldStatus = eq.status;
+    const oldPhoto = await loadPhoto(eq.id);
 
     showLoading(true);
     try {
-        // Обновляем метаданные
         await update(ref(db, 'equipment/' + eq.id), {
             location: pendingMove.to,
             status: newStatus
         });
 
-        // Если есть новое фото — сохраняем в photos/{id}
-        if (movePhotoData) {
+        const photoChanged = movePhotoData && movePhotoData !== oldPhoto;
+        if (photoChanged) {
             await set(ref(db, 'photos/' + eq.id), movePhotoData);
         }
 
-        // Логи
+        // Запись в историю
         const h1 = push(ref(db, 'history'));
+        const histId = h1.key;
         await set(h1, {
             equipmentId: eq.id, equipmentName: eq.name,
-            type: 'move', from: oldLocation, to: pendingMove.to,
-            user: currentUser.fullName, timestamp: Date.now()
+            type: 'move',
+            from: oldLocation, to: pendingMove.to,
+            user: currentUser.fullName,
+            userInitials: initials(currentUser.fullName),
+            timestamp: Date.now(),
+            hasPhoto: photoChanged
         });
+        if (photoChanged) {
+            await set(ref(db, 'historyPhoto/' + histId), movePhotoData);
+        }
 
         if (oldStatus !== newStatus) {
             const h2 = push(ref(db, 'history'));
             await set(h2, {
                 equipmentId: eq.id, equipmentName: eq.name,
-                type: 'edit', field: 'status', oldValue: oldStatus, newValue: newStatus,
-                user: currentUser.fullName, timestamp: Date.now()
+                type: 'edit', field: 'status',
+                oldValue: oldStatus, newValue: newStatus,
+                user: currentUser.fullName,
+                userInitials: initials(currentUser.fullName),
+                timestamp: Date.now()
             });
         }
 
@@ -1481,15 +1654,13 @@ async function confirmMove() {
     }
 }
 
-// ========================================================================
-// ИСТОРИЯ (внутри модалки оборудования)
-// ========================================================================
+// ======================== ИСТОРИЯ — МЕССЕНДЖЕР ========================
 async function renderHistory(equipmentId) {
     const list = $('eqHistoryList');
     list.innerHTML = '';
     const items = history
         .filter(h => h.equipmentId === equipmentId)
-        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+        .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
 
     if (items.length === 0) {
         const empty = document.createElement('div');
@@ -1500,76 +1671,89 @@ async function renderHistory(equipmentId) {
     }
 
     for (const item of items) {
-        const el = document.createElement('div');
-        el.className = 'history-item';
+        const msg = document.createElement('div');
+        msg.className = 'chat-msg';
 
-        const header = document.createElement('div');
-        header.className = 'history-header';
+        const avatar = document.createElement('div');
+        avatar.className = 'chat-avatar';
+        avatar.textContent = item.userInitials || initials(item.user || '?');
 
-        const action = document.createElement('span');
-        action.className = 'history-action';
-        action.textContent = item.type === 'add' ? 'Добавлено' :
-                             item.type === 'move' ? 'Перемещено' :
-                             item.type === 'edit' ? 'Изменено' : 'Удалено';
+        const content = document.createElement('div');
+        content.className = 'chat-content';
 
+        const meta = document.createElement('div');
+        meta.className = 'chat-meta';
+        const author = document.createElement('span');
+        author.className = 'chat-author';
+        author.textContent = item.user || '—';
         const time = document.createElement('span');
-        time.className = 'history-time';
+        time.className = 'chat-time';
         time.textContent = formatTime(item.timestamp);
+        meta.appendChild(author);
+        meta.appendChild(time);
 
-        header.appendChild(action);
-        header.appendChild(time);
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble type-' + (item.type === 'archive' ? 'archive' : item.type);
 
-        const body = document.createElement('div');
-        body.className = 'history-body';
+        const actionTitle = document.createElement('div');
+        actionTitle.className = 'chat-action-title';
+        actionTitle.textContent = item.type === 'add' ? 'Добавлено' :
+                                   item.type === 'move' ? 'Перемещено' :
+                                   item.type === 'edit' ? 'Изменено' :
+                                   item.type === 'archive' ? 'В архив' : 'Восстановлено';
+        bubble.appendChild(actionTitle);
 
-        if (item.type === 'move') {
-            const route = document.createElement('span');
-            route.className = 'history-route';
-            route.innerHTML = `${item.from} <span class="arrow">→</span> ${item.to}`;
-            body.appendChild(route);
-        } else if (item.type === 'add') {
-            const route = document.createElement('span');
-            route.className = 'history-route';
-            route.innerHTML = `<span class="arrow">→</span> ${item.to}`;
-            body.appendChild(route);
+        if (item.type === 'move' || item.type === 'add') {
+            const route = document.createElement('div');
+            route.className = 'chat-route';
+            if (item.type === 'move') {
+                route.innerHTML = `📍 ${item.from} <span class="arrow">→</span> ${item.to}`;
+            } else {
+                route.innerHTML = `📍 <span class="arrow">→</span> ${item.to}`;
+            }
+            bubble.appendChild(route);
         } else if (item.type === 'edit') {
-            const route = document.createElement('span');
-            route.className = 'history-route';
+            const route = document.createElement('div');
+            route.className = 'chat-route';
             const names = { name: 'Наименование', params: 'Параметры', location: 'Место', status: 'Статус', photo: 'Фото' };
             route.textContent = `${names[item.field] || item.field}: ${item.oldValue} → ${item.newValue}`;
-            body.appendChild(route);
+            bubble.appendChild(route);
+        } else if (item.type === 'archive') {
+            const route = document.createElement('div');
+            route.className = 'chat-route';
+            route.textContent = `📦 Место: ${item.from || '—'}`;
+            bubble.appendChild(route);
         }
 
-        // Фото для этого события (если есть) — по equipmentId на момент события
-        if (item.type === 'move' || item.type === 'edit') {
-            const photoData = await loadPhoto(item.equipmentId);
-            if (photoData) {
+        // Фото показываем ТОЛЬКО если оно было добавлено в этом событии
+        if (item.hasPhoto) {
+            const photoSnap = await get(ref(db, 'historyPhoto/' + item.id));
+            const photoSrc = photoSnap.val();
+            if (photoSrc) {
                 const img = document.createElement('img');
-                img.className = 'history-photo';
-                img.src = photoData;
+                img.className = 'chat-photo';
+                img.src = photoSrc;
                 img.alt = '';
                 img.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    openPhotoViewer(photoData);
+                    openPhotoViewer(photoSrc);
                 });
-                body.appendChild(img);
+                bubble.appendChild(img);
             }
         }
 
-        const user = document.createElement('span');
-        user.className = 'history-user';
-        user.textContent = item.user || '—';
-        body.appendChild(user);
-
-        el.appendChild(header);
-        el.appendChild(body);
-        list.appendChild(el);
+        content.appendChild(meta);
+        content.appendChild(bubble);
+        msg.appendChild(avatar);
+        msg.appendChild(content);
+        list.appendChild(msg);
     }
+
+    // Скролл вниз
+    setTimeout(() => { list.scrollTop = list.scrollHeight; }, 50);
 }
 
-// ========================================================================
-// МОДАЛКА ОБОРУДОВАНИЯ
-// ========================================================================
+// ======================== МОДАЛКА ОБОРУДОВАНИЯ ========================
 async function openEqModal(id) {
     const eq = equipment.find(x => x.id === id);
     if (!eq) return;
@@ -1581,13 +1765,14 @@ async function openEqModal(id) {
     $('eqModalTitle').textContent = eq.name;
     $('eqName').value = eq.name;
     $('eqParams').value = eq.params;
-    $('eqPhotoPreview').src = 'https://placehold.co/68x68/e2e8f0/94a3b8?text=%20';
+    $('eqPhotoPreview').src = 'https://placehold.co/80x80/e2e8f0/94a3b8?text=%20';
 
-    fillSelect($('eqLocation'));
-    $('eqLocation').value = eq.location;
-    $('eqStatus').value = eq.status;
+    eqLocationValue = eq.location;
+    eqStatusValue = eq.status;
+    renderLocationChips($('eqLocationChips'), eqLocationValue, (v) => { eqLocationValue = v; });
+    renderStatusChips($('eqStatusChips'), eqStatusValue, (v) => { eqStatusValue = v; });
 
-    // Ленивая загрузка фото
+    // Загружаем последнее фото
     loadPhoto(id).then(data => {
         currentEqPhoto = data || '';
         eqPhotoData = data || '';
@@ -1611,8 +1796,8 @@ async function saveEq() {
 
     const newName = $('eqName').value.trim();
     const newParams = $('eqParams').value.trim();
-    const newLoc = $('eqLocation').value;
-    const newStatus = $('eqStatus').value;
+    const newLoc = eqLocationValue;
+    const newStatus = eqStatusValue;
     const newPhoto = eqPhotoData;
 
     if (!newName) { showToast('Укажите наименование'); return; }
@@ -1621,13 +1806,12 @@ async function saveEq() {
     showLoading(true);
     try {
         await update(ref(db, 'equipment/' + eq.id), {
-            name: newName,
-            params: newParams,
-            location: newLoc,
-            status: newStatus
+            name: newName, params: newParams,
+            location: newLoc, status: newStatus
         });
 
-        if (newPhoto !== currentEqPhoto) {
+        const photoChanged = newPhoto !== currentEqPhoto;
+        if (photoChanged) {
             await set(ref(db, 'photos/' + eq.id), newPhoto);
         }
 
@@ -1637,15 +1821,19 @@ async function saveEq() {
             await set(r, {
                 equipmentId: eq.id, equipmentName: newName,
                 type: 'move', from: eq.location, to: newLoc,
-                user: currentUser.fullName, timestamp: Date.now()
+                user: currentUser.fullName, userInitials: initials(currentUser.fullName),
+                timestamp: Date.now(),
+                hasPhoto: photoChanged
             });
+            if (photoChanged) await set(ref(db, 'historyPhoto/' + r.key), newPhoto);
         }
         if (eq.name !== newName) {
             const r = push(ref(db, 'history'));
             await set(r, {
                 equipmentId: eq.id, equipmentName: newName,
                 type: 'edit', field: 'name', oldValue: eq.name, newValue: newName,
-                user: currentUser.fullName, timestamp: Date.now()
+                user: currentUser.fullName, userInitials: initials(currentUser.fullName),
+                timestamp: Date.now()
             });
         }
         if (eq.params !== newParams) {
@@ -1653,7 +1841,8 @@ async function saveEq() {
             await set(r, {
                 equipmentId: eq.id, equipmentName: newName,
                 type: 'edit', field: 'params', oldValue: eq.params, newValue: newParams,
-                user: currentUser.fullName, timestamp: Date.now()
+                user: currentUser.fullName, userInitials: initials(currentUser.fullName),
+                timestamp: Date.now()
             });
         }
         if (eq.status !== newStatus) {
@@ -1661,8 +1850,21 @@ async function saveEq() {
             await set(r, {
                 equipmentId: eq.id, equipmentName: newName,
                 type: 'edit', field: 'status', oldValue: eq.status, newValue: newStatus,
-                user: currentUser.fullName, timestamp: Date.now()
+                user: currentUser.fullName, userInitials: initials(currentUser.fullName),
+                timestamp: Date.now()
             });
+        }
+        if (photoChanged && eq.location === newLoc && eq.name === newName && eq.params === newParams && eq.status === newStatus) {
+            // Фото изменилось, но остальное нет — отдельная запись
+            const r = push(ref(db, 'history'));
+            await set(r, {
+                equipmentId: eq.id, equipmentName: newName,
+                type: 'edit', field: 'photo', oldValue: 'старое', newValue: 'новое',
+                user: currentUser.fullName, userInitials: initials(currentUser.fullName),
+                timestamp: Date.now(),
+                hasPhoto: true
+            });
+            await set(ref(db, 'historyPhoto/' + r.key), newPhoto);
         }
 
         showToast('Сохранено');
@@ -1675,23 +1877,30 @@ async function saveEq() {
     }
 }
 
-async function deleteEq() {
+// ======================== АРХИВ ========================
+async function archiveEq() {
     if (!editingId) return;
     const eq = equipment.find(x => x.id === editingId);
     if (!eq) return;
-    if (!confirm(`Удалить "${eq.name}"?`)) return;
+    if (!confirm(`Переместить "${eq.name}" в архив?`)) return;
 
     showLoading(true);
     try {
-        await remove(ref(db, 'equipment/' + eq.id));
-        await remove(ref(db, 'photos/' + eq.id));
+        await update(ref(db, 'equipment/' + eq.id), {
+            archived: true,
+            archivedBy: currentUser.fullName,
+            archivedAt: Date.now()
+        });
+
         const r = push(ref(db, 'history'));
         await set(r, {
             equipmentId: eq.id, equipmentName: eq.name,
-            type: 'delete', from: eq.location,
-            user: currentUser.fullName, timestamp: Date.now()
+            type: 'archive', from: eq.location,
+            user: currentUser.fullName, userInitials: initials(currentUser.fullName),
+            timestamp: Date.now()
         });
-        showToast('Удалено');
+
+        showToast(`В архиве: ${eq.name}`);
         closeEqModal();
     } catch (e) {
         showToast('Ошибка: ' + e.message);
@@ -1700,17 +1909,111 @@ async function deleteEq() {
     }
 }
 
-// ========================================================================
-// МОДАЛКА ДОБАВЛЕНИЯ
-// ========================================================================
+async function openArchiveModal() {
+    renderArchive();
+    $('archiveModal').classList.add('open');
+}
+
+function renderArchive() {
+    const list = $('archiveList');
+    list.innerHTML = '';
+    const archived = equipment.filter(e => e.archived);
+
+    if (archived.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-message';
+        empty.textContent = 'Архив пуст';
+        list.appendChild(empty);
+        return;
+    }
+
+    archived.sort((a, b) => (b.archivedAt || 0) - (a.archivedAt || 0));
+
+    archived.forEach(eq => {
+        const item = document.createElement('div');
+        item.className = 'archive-item';
+
+        const header = document.createElement('div');
+        header.className = 'archive-item-header';
+
+        const nameEl = document.createElement('div');
+        nameEl.className = 'archive-item-name';
+        nameEl.textContent = eq.name;
+
+        const restoreBtn = document.createElement('button');
+        restoreBtn.className = 'btn btn-primary';
+        restoreBtn.style.padding = '6px 14px';
+        restoreBtn.style.fontSize = '0.8rem';
+        restoreBtn.style.minHeight = '34px';
+        restoreBtn.textContent = 'Восстановить';
+        restoreBtn.addEventListener('click', () => restoreFromArchive(eq.id));
+
+        header.appendChild(nameEl);
+        header.appendChild(restoreBtn);
+
+        const info = document.createElement('div');
+        info.className = 'archive-item-info';
+        info.textContent = `${eq.params} · было: ${eq.location} · ${eq.status}`;
+
+        const meta = document.createElement('div');
+        meta.className = 'archive-item-meta';
+        const delBy = document.createElement('div');
+        delBy.textContent = `🗄 Удалил: ${eq.archivedBy || '—'}`;
+        const delAt = document.createElement('div');
+        delAt.textContent = `🕐 ${formatTime(eq.archivedAt)}`;
+        meta.appendChild(delBy);
+        meta.appendChild(delAt);
+
+        item.appendChild(header);
+        item.appendChild(info);
+        item.appendChild(meta);
+        list.appendChild(item);
+    });
+}
+
+async function restoreFromArchive(id) {
+    const eq = equipment.find(x => x.id === id);
+    if (!eq) return;
+
+    showLoading(true);
+    try {
+        await update(ref(db, 'equipment/' + eq.id), {
+            archived: false,
+            archivedBy: null,
+            archivedAt: null,
+            restoredBy: currentUser.fullName,
+            restoredAt: Date.now()
+        });
+
+        const r = push(ref(db, 'history'));
+        await set(r, {
+            equipmentId: eq.id, equipmentName: eq.name,
+            type: 'restore', to: eq.location,
+            user: currentUser.fullName, userInitials: initials(currentUser.fullName),
+            timestamp: Date.now()
+        });
+
+        showToast(`Восстановлено: ${eq.name}`);
+        renderArchive();
+    } catch (e) {
+        showToast('Ошибка: ' + e.message);
+    } finally {
+        showLoading(false);
+    }
+}
+
+// ======================== МОДАЛКА ДОБАВЛЕНИЯ ========================
 function openAddModal() {
     addPhotoData = '';
     $('addName').value = '';
     $('addParams').value = '';
-    $('addPhotoPreview').src = 'https://placehold.co/68x68/e2e8f0/94a3b8?text=%20';
-    fillSelect($('addLocation'));
-    $('addLocation').value = DEPARTMENTS[0];
-    $('addStatus').value = 'рабочий';
+    $('addPhotoPreview').src = 'https://placehold.co/80x80/e2e8f0/94a3b8?text=%20';
+
+    addLocationValue = DEPARTMENTS[0];
+    addStatusValue = 'рабочий';
+    renderLocationChips($('addLocationChips'), addLocationValue, (v) => { addLocationValue = v; });
+    renderStatusChips($('addStatusChips'), addStatusValue, (v) => { addStatusValue = v; });
+
     $('addModal').classList.add('open');
     setTimeout(() => $('addName').focus(), 200);
 }
@@ -1720,8 +2023,6 @@ function closeAddModal() { $('addModal').classList.remove('open'); }
 async function saveAdd() {
     const name = $('addName').value.trim();
     const params = $('addParams').value.trim();
-    const loc = $('addLocation').value;
-    const status = $('addStatus').value;
 
     if (!name) { showToast('Укажите наименование'); return; }
     if (!params) { showToast('Укажите параметры'); return; }
@@ -1731,7 +2032,10 @@ async function saveAdd() {
         const newRef = push(ref(db, 'equipment'));
         const id = newRef.key;
         await set(newRef, {
-            name, params, location: loc, status,
+            name, params,
+            location: addLocationValue,
+            status: addStatusValue,
+            archived: false,
             createdAt: Date.now(),
             createdBy: currentUser.fullName
         });
@@ -1743,9 +2047,14 @@ async function saveAdd() {
         const r = push(ref(db, 'history'));
         await set(r, {
             equipmentId: id, equipmentName: name,
-            type: 'add', to: loc,
-            user: currentUser.fullName, timestamp: Date.now()
+            type: 'add', to: addLocationValue,
+            user: currentUser.fullName, userInitials: initials(currentUser.fullName),
+            timestamp: Date.now(),
+            hasPhoto: !!addPhotoData
         });
+        if (addPhotoData) {
+            await set(ref(db, 'historyPhoto/' + r.key), addPhotoData);
+        }
 
         showToast(`Добавлено: ${name}`);
         closeAddModal();
@@ -1756,9 +2065,7 @@ async function saveAdd() {
     }
 }
 
-// ========================================================================
-// ФОТО (сжатие + превью + клик для просмотра)
-// ========================================================================
+// ======================== ФОТО ========================
 function setupPhoto(inputId, btnId, galleryBtnId, previewId, callback) {
     const input = $(inputId);
     const btn = $(btnId);
@@ -1787,7 +2094,6 @@ function setupPhoto(inputId, btnId, galleryBtnId, previewId, callback) {
         input.value = '';
     });
 
-    // Клик по превью — открыть полноэкранно
     preview.style.cursor = 'zoom-in';
     preview.addEventListener('click', () => {
         if (preview.src && !preview.src.startsWith('https://placehold.co')) {
@@ -1796,10 +2102,22 @@ function setupPhoto(inputId, btnId, galleryBtnId, previewId, callback) {
     });
 }
 
-// ========================================================================
-// ИНИЦИАЛИЗАЦИЯ
-// ========================================================================
+// ======================== ИНИЦИАЛИЗАЦИЯ ========================
 function init() {
+    // Запрет pinch-zoom на iOS через gesturestart
+    document.addEventListener('gesturestart', (e) => {
+        if (!$('photoViewer').classList.contains('open')) e.preventDefault();
+    });
+    // Запрет double-tap zoom
+    let lastTouch = 0;
+    document.addEventListener('touchend', (e) => {
+        const now = Date.now();
+        if (now - lastTouch <= 300 && !e.target.closest('.photo-viewer')) {
+            e.preventDefault();
+        }
+        lastTouch = now;
+    }, { passive: false });
+
     $('tabLogin').addEventListener('click', () => setAuthMode('login'));
     $('tabRegister').addEventListener('click', () => setAuthMode('register'));
 
@@ -1809,38 +2127,29 @@ function init() {
     $('authPassword').addEventListener('keypress', (e) => { if (e.key === 'Enter') authMode === 'register' ? $('authPassword2').focus() : handleAuth(); });
     $('authPassword2').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleAuth(); });
 
-    // Поиск
     $('searchInput').addEventListener('input', (e) => {
         currentSearch = e.target.value.trim().toLowerCase();
         render();
     });
 
     $('addBtn').addEventListener('click', openAddModal);
+    $('archiveBtn').addEventListener('click', openArchiveModal);
     $('logoutBtn').addEventListener('click', () => { if (confirm('Выйти?')) logout(); });
 
     $('addCancelBtn').addEventListener('click', closeAddModal);
     $('addSaveBtn').addEventListener('click', saveAdd);
     $('eqCancelBtn').addEventListener('click', closeEqModal);
     $('eqSaveBtn').addEventListener('click', saveEq);
-    $('eqDeleteBtn').addEventListener('click', deleteEq);
+    $('eqArchiveBtn').addEventListener('click', archiveEq);
     $('moveCancelBtn').addEventListener('click', closeMoveModal);
     $('moveConfirmBtn').addEventListener('click', confirmMove);
+    $('archiveCloseBtn').addEventListener('click', () => $('archiveModal').classList.remove('open'));
 
-    $('moveStatusChoice').addEventListener('click', (e) => {
-        const label = e.target.closest('label');
-        if (!label) return;
-        $('moveStatusChoice').querySelectorAll('label').forEach(l => l.classList.remove('selected'));
-        label.classList.add('selected');
-        label.querySelector('input').checked = true;
-    });
-
-    // Просмотр фото
     $('photoViewerClose').addEventListener('click', closePhotoViewer);
     $('photoViewer').addEventListener('click', (e) => {
         if (e.target === $('photoViewer')) closePhotoViewer();
     });
 
-    // Закрытие модалок по фону
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', (e) => {
             if (e.target === overlay) {
@@ -1859,7 +2168,6 @@ function init() {
         }
     });
 
-    // Фото
     setupPhoto('addPhotoInput', 'addPhotoBtn', 'addPhotoGalleryBtn', 'addPhotoPreview', (d) => { addPhotoData = d; });
     setupPhoto('eqPhotoInput', 'eqPhotoBtn', 'eqPhotoGalleryBtn', 'eqPhotoPreview', (d) => { eqPhotoData = d; });
     setupPhoto('movePhotoInput', 'movePhotoBtn', 'movePhotoGalleryBtn', 'movePhotoPreview', (d) => { movePhotoData = d; });
@@ -1872,7 +2180,7 @@ function init() {
         }
     });
 
-    // Подписка на users нужна ещё до входа — для автодополнения
+    // Подписка users для автодополнения до входа
     onValue(ref(db, 'users'), (snap) => {
         const val = snap.val();
         users = val ? Object.entries(val).map(([id, u]) => ({ id, ...u })) : [];
@@ -1888,13 +2196,11 @@ function init() {
                 $('authScreen').style.display = 'none';
                 $('app').classList.add('active');
                 $('userGreeting').textContent = currentUser.fullName;
-                fillSelect($('addLocation'));
                 subscribeData();
             }
         } catch (e) { console.warn('session restore failed', e); }
     }
 
-    // Service worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW error', err));
     }
