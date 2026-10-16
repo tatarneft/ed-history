@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#1e293b">
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Журнал">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <title>Журнал оборудования</title>
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        :root {
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+        }
+
+        html, body { height: 100%; overflow: hidden; }
+
+        body {
+            background-color: #b8c4d4;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            color: #1e293b;
+            overscroll-behavior: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.3); border-radius: 3px; }
+
+        /* ============== ЭКРАН ВХОДА / РЕГИСТРАЦИИ ============== */
+        .auth-screen {
+            position: fixed;
+            inset: 0;
+            background: #b8c4d4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            padding-top: calc(16px + var(--safe-top));
+            padding-bottom: calc(16px + var(--safe-bottom));
+            z-index: 1200;
+            overflow-y: auto;
+        }
+
+        .auth-card {
+            background: #ffffff;
+            padding: 28px 24px;
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.14);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #94a3b8;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .auth-card h1 { font-size: 1.4rem; font-weight: 600; color: #0f172a; }
+
+        .auth-tabs {
+            display: flex;
+            background: #f1f5f9;
+            border-radius: 40px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            border-radius: 40px;
+            border: none;
+            background: transparent;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: #64748b;
+            transition: 0.15s;
+            font-family: inherit;
+        }
+
+        .auth-tab.active {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .field { display: flex; flex-direction: column; gap: 6px; position: relative; }
+        .field label { font-size: 0.8rem; color: #475569; font-weight: 500; }
+
+        .field input, .field select {
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #94a3b8;
+            font-size: 1rem;
+            background: #ffffff;
+            outline: none;
+            transition: 0.15s;
+            font-family: inherit;
+            color: #0f172a;
+            min-height: 48px;
+            width: 100%;
+        }
+
+        .field input:focus, .field select:focus {
+            border-color: #475569;
+            box-shadow: 0 0 0 3px rgba(71, 85, 105, 0.1);
+        }
+
+        .btn {
+            padding: 12px 18px;
+            border-radius: 40px;
+            border: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.15s;
+            font-family: inherit;
+            min-height: 48px;
+        }
+
+        .btn-primary { background: #1e293b; color: white; }
+        .btn-primary:hover { background: #0f172a; }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .btn-outline { background: #ffffff; color: #1e293b; border: 1px solid #94a3b8; }
+        .btn-outline:hover { background: #f1f5f9; }
+
+        .auth-error { color: #991b1b; font-size: 0.85rem; text-align: center; min-height: 20px; }
+        .auth-success { color: #166534; font-size: 0.85rem; text-align: center; min-height: 20px; }
+
+        .autocomplete-list {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid #94a3b8;
+            border-radius: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 50;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            display: none;
+        }
+
+        .autocomplete-list.open { display: block; }
+
+        .autocomplete-item {
+            padding: 12px 14px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #0f172a;
+        }
+        .autocomplete-item:hover { background: #f1f5f9; }
+
+        /* ============== ПРИЛОЖЕНИЕ ============== */
+        .app-container {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            height: 100dvh;
+            padding-top: var(--safe-top);
+            padding-left: var(--safe-left);
+            padding-right: var(--safe-right);
+        }
+
+        .app-container.active { display: flex; }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 10px;
+            padding: 12px 16px;
+            background: #b8c4d4;
+            flex-shrink: 0;
+        }
+
+        .user-greeting {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #0f172a;
+            background: #ffffff;
+            padding: 8px 14px;
+            border-radius: 40px;
+            border: 1px solid #94a3b8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 50%;
+        }
+
+        .top-actions { display: flex; gap: 8px; align-items: center; }
+
+        .btn-icon {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            background: #ffffff;
+            color: #1e293b;
+            border: 1px solid #94a3b8;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.15s;
+        }
+
+        .btn-icon:hover { background: #f1f5f9; }
+        .btn-icon:disabled { opacity: 0.5; cursor: wait; }
+
+        .grid-wrapper {
+            flex: 1;
+            padding: 0 16px calc(16px + var(--safe-bottom));
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, minmax(280px, 1fr));
+            gap: 16px;
+            min-height: 100%;
+        }
+
+        .dept-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 14px 16px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.07);
+            border: 1px solid #94a3b8;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: 0.12s;
+        }
+
+        .dept-card.drag-over {
+            border-color: #1e293b;
+            background: #f8fafc;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+        }
+
+        .dept-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 8px;
+            flex-shrink: 0;
+        }
+
+        .dept-title > span:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dept-count {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: #475569;
+            background: #e2e8f0;
+            padding: 2px 8px;
+            border-radius: 30px;
+            flex-shrink: 0;
+        }
+
+        .equipment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 2px;
+            min-height: 0;
+        }
+
+        .equipment-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.12s;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .equipment-card.status-working { background: #dcfce7; border-color: #86efac; }
+        .equipment-card.status-broken { background: #fee2e2; border-color: #fca5a5; }
+        .equipment-card.dragging { opacity: 0.35; border-style: dashed; }
+
+        .equipment-info { flex: 1; min-width: 0; }
+
+        .equipment-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #0f172a;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .equipment-details {
+            font-size: 0.7rem;
+            color: #475569;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 3px;
+            align-items: center;
+        }
+
+        .equipment-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+
+        .equipment-status.working { background: #bbf7d0; color: #166534; }
+        .equipment-status.broken { background: #fecaca; color: #991b1b; }
+
+        .repair-card { background: #fef2f2; border-color: #fca5a5; }
+        .repair-card.drag-over { border-color: #991b1b; background: #fee2e2; }
+        .repair-card .dept-title { color: #991b1b; border-bottom-color: #fecaca; }
+        .repair-card .dept-count { background: #fecaca; color: #991b1b; }
+
+        .empty-message {
+            color: #64748b;
+            font-size: 0.8rem;
+            font-style: italic;
+            padding: 12px 0;
+            text-align: center;
+        }
+
+        /* ============== МОДАЛЬНЫЕ ОКНА ============== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(2px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            padding: 16px;
+            padding-top: calc(16px + var(--safe-top));
+            padding-bottom: calc(16px + var(--safe-bottom));
+            overflow-y: auto;
+        }
+
+        .modal-overlay.open { display: flex; }
+
+        .modal-panel {
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.22);
+            width: 100%;
+            max-width: 480px;
+            border: 1px solid #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+            overflow: hidden;
+        }
+
+        .modal-panel.wide { max-width: 640px; }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 18px;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+            flex-shrink: 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #0f172a;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .modal-header-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+        .modal-header-actions .btn {
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            min-height: 38px;
+        }
+
+        .modal-body {
+            padding: 18px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            min-height: 0;
+        }
+
+        .field-row { display: flex; gap: 12px; }
+        .field-row .field { flex: 1; }
+
+        .photo-block {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px dashed #cbd5e1;
+            background: #f8fafc;
+        }
+
+        .photo-preview {
+            width: 72px;
+            height: 72px;
+            border-radius: 10px;
+            object-fit: cover;
+            background: #e2e8f0;
+            flex-shrink: 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .photo-actions { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+
+        .photo-actions .btn {
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            width: 100%;
+            min-height: 38px;
+        }
+
+        .status-choice { display: flex; gap: 10px; }
+
+        .status-choice label {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #94a3b8;
+            text-align: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            user-select: none;
+            transition: 0.15s;
+        }
+
+        .status-choice input[type="radio"] { display: none; }
+
+        .status-choice label.working-choice { background: #dcfce7; border-color: #86efac; color: #166534; }
+        .status-choice label.working-choice.selected { background: #86efac; border-color: #166534; }
+        .status-choice label.broken-choice { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+        .status-choice label.broken-choice.selected { background: #fca5a5; border-color: #991b1b; }
+
+        .move-info {
+            font-size: 0.85rem;
+            color: #475569;
+            background: #f8fafc;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .move-info .arrow { color: #64748b; font-weight: 600; }
+
+        .equipment-history-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+            margin-top: 4px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .history-list { display: flex; flex-direction: column; gap: 8px; }
+
+        .history-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-size: 0.8rem;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .history-action { font-weight: 600; color: #0f172a; font-size: 0.82rem; }
+        .history-time { font-size: 0.72rem; color: #94a3b8; white-space: nowrap; }
+
+        .history-body {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 12px;
+            align-items: center;
+        }
+
+        .history-route {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffffff;
+            padding: 3px 12px;
+            border-radius: 30px;
+            border: 1px solid #e2e8f0;
+            font-weight: 500;
+            font-size: 0.78rem;
+        }
+
+        .history-route .arrow { color: #64748b; font-weight: 600; }
+
+        .history-user {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #475569;
+            font-size: 0.78rem;
+        }
+
+        .history-user::before { content: "👤"; font-size: 0.75rem; }
+
+        .history-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #e2e8f0;
+            background: #f1f5f9;
+        }
+
+        /* ============== ТОСТ ============== */
+        .toast {
+            position: fixed;
+            bottom: calc(24px + var(--safe-bottom));
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.25s ease;
+            z-index: 1300;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            max-width: calc(100vw - 32px);
+            text-align: center;
+        }
+
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ============== ЗАГРУЗКА ============== */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(184, 196, 212, 0.8);
+            backdrop-filter: blur(2px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1400;
+        }
+
+        .loading-overlay.show { display: flex; }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(30, 41, 59, 0.2);
+            border-top-color: #1e293b;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ============== АДАПТАЦИЯ ============== */
+        @media (max-width: 1024px) {
+            .departments-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, minmax(240px, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .top-bar { padding: 10px 12px; gap: 8px; }
+            .user-greeting { font-size: 0.85rem; padding: 6px 12px; max-width: 55%; }
+            .btn-icon { width: 40px; height: 40px; font-size: 1rem; }
+
+            .grid-wrapper { padding: 0 12px calc(12px + var(--safe-bottom)); }
+
+            .departments-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                gap: 12px;
+            }
+
+            .dept-card { height: 260px; }
+
+            .modal-panel { max-height: 95vh; border-radius: 20px; }
+            .modal-header { padding: 12px 14px; }
+            .modal-header h2 { font-size: 0.95rem; }
+            .modal-body { padding: 14px; gap: 12px; }
+
+            .field-row { flex-direction: column; gap: 12px; }
+            .status-choice { flex-direction: column; }
+
+            .history-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+            .photo-block { flex-direction: column; align-items: stretch; }
+            .photo-preview { width: 100%; height: 140px; }
+            .photo-actions { flex-direction: row; }
+            .photo-actions .btn { flex: 1; }
+
+            .auth-card { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ЭКРАН ВХОДА / РЕГИСТРАЦИИ -->
+<div class="auth-screen" id="authScreen">
+    <div class="auth-card">
+        <h1 id="authTitle">Журнал оборудования</h1>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin">Вход</button>
+            <button class="auth-tab" id="tabRegister">Регистрация</button>
+        </div>
+
+        <div class="field">
+            <label>ФИО</label>
+            <input type="text" id="authName" autocomplete="off" autocorrect="off" spellcheck="false">
+            <div class="autocomplete-list" id="authAutocomplete"></div>
+        </div>
+
+        <div class="field">
+            <label>Пароль</label>
+            <input type="password" id="authPassword" autocomplete="new-password">
+        </div>
+
+        <div class="field" id="authPassword2Field" style="display:none;">
+            <label>Повторите пароль</label>
+            <input type="password" id="authPassword2" autocomplete="new-password">
+        </div>
+
+        <div class="auth-error" id="authError"></div>
+        <div class="auth-success" id="authSuccess"></div>
+
+        <button class="btn btn-primary" id="authSubmit">Войти</button>
+    </div>
+</div>
+
+<!-- ПРИЛОЖЕНИЕ -->
+<div class="app-container" id="app">
+    <div class="top-bar">
+        <div class="user-greeting" id="userGreeting">—</div>
+        <div class="top-actions">
+            <button class="btn-icon" id="addBtn" title="Добавить">+</button>
+            <button class="btn-icon" id="refreshBtn" title="Обновить">⟳</button>
+            <button class="btn-icon" id="logoutBtn" title="Выйти">⎋</button>
+        </div>
+    </div>
+
+    <div class="grid-wrapper">
+        <div class="departments-grid" id="departmentsGrid"></div>
+    </div>
+</div>
+
+<!-- МОДАЛКА ДОБАВЛЕНИЯ -->
+<div class="modal-overlay" id="addModal">
+    <div class="modal-panel">
+        <div class="modal-header">
+            <h2>Добавить оборудование</h2>
+            <div class="modal-header-actions">
+                <button class="btn btn-outline" id="addCancelBtn">Отмена</button>
+                <button class="btn btn-primary" id="addSaveBtn">Сохранить</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="field">
+                <label>Наименование</label>
+                <input type="text" id="addName" placeholder="Например: АИР 120" autocomplete="off">
+            </div>
+            <div class="field">
+                <label>Параметры</label>
+                <input type="text" id="addParams" placeholder="Мощность, обороты и т.д." autocomplete="off">
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label>Местонахождение</label>
+                    <select id="addLocation"></select>
+                </div>
+                <div class="field">
+                    <label>Статус</label>
+                    <select id="addStatus">
+                        <option value="рабочий">рабочий</option>
+                        <option value="не рабочий">не рабочий</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <label>Фото</label>
+                <div class="photo-block">
+                    <img id="addPhotoPreview" class="photo-preview" alt="">
+                    <div class="photo-actions">
+                        <input type="file" accept="image/*" capture="environment" id="addPhotoInput" style="display:none;">
+                        <button type="button" class="btn btn-outline" id="addPhotoBtn">📷 Камера</button>
+                        <button type="button" class="btn btn-outline" id="addPhotoGalleryBtn">🖼️ Галерея</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- МОДАЛКА ОБОРУДОВАНИЯ -->
+<div class="modal-overlay" id="equipmentModal">
+    <div class="modal-panel wide">
+        <div class="modal-header">
+            <h2 id="eqModalTitle">Оборудование</h2>
+            <div class="modal-header-actions">
+                <button class="btn btn-outline" id="eqCancelBtn">Отмена</button>
+                <button class="btn btn-primary" id="eqSaveBtn">Сохранить</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="field">
+                <label>Фото</label>
+                <div class="photo-block">
+                    <img id="eqPhotoPreview" class="photo-preview" alt="">
+                    <div class="photo-actions">
+                        <input type="file" accept="image/*" capture="environment" id="eqPhotoInput" style="display:none;">
+                        <button type="button" class="btn btn-outline" id="eqPhotoBtn">📷 Камера</button>
+                        <button type="button" class="btn btn-outline" id="eqPhotoGalleryBtn">🖼️ Галерея</button>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label>Наименование</label>
+                <input type="text" id="eqName" autocomplete="off">
+            </div>
+            <div class="field">
+                <label>Параметры</label>
+                <input type="text" id="eqParams" autocomplete="off">
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label>Местонахождение</label>
+                    <select id="eqLocation"></select>
+                </div>
+                <div class="field">
+                    <label>Статус</label>
+                    <select id="eqStatus">
+                        <option value="рабочий">рабочий</option>
+                        <option value="не рабочий">не рабочий</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display:flex; justify-content: flex-end;">
+                <button class="btn btn-outline" id="eqDeleteBtn" style="color:#991b1b; border-color:#fca5a5;">Удалить</button>
+            </div>
+
+            <div class="equipment-history-title">История перемещений</div>
+            <div class="history-list" id="eqHistoryList"></div>
+        </div>
+    </div>
+</div>
+
+<!-- МОДАЛКА ПЕРЕМЕЩЕНИЯ -->
+<div class="modal-overlay" id="moveModal">
+    <div class="modal-panel">
+        <div class="modal-header">
+            <h2>Перемещение</h2>
+            <div class="modal-header-actions">
+                <button class="btn btn-outline" id="moveCancelBtn">Отмена</button>
+                <button class="btn btn-primary" id="moveConfirmBtn">Сохранить</button>
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="move-info" id="moveInfo"></div>
+            <div class="field">
+                <label>Статус оборудования</label>
+                <div class="status-choice" id="moveStatusChoice">
+                    <label class="working-choice" data-value="рабочий">
+                        <input type="radio" name="moveStatus" value="рабочий">
+                        <span>рабочий</span>
+                    </label>
+                    <label class="broken-choice" data-value="не рабочий">
+                        <input type="radio" name="moveStatus" value="не рабочий">
+                        <span>не рабочий</span>
+                    </label>
+                </div>
+            </div>
+            <div class="field">
+                <label>Фото (при необходимости)</label>
+                <div class="photo-block">
+                    <img id="movePhotoPreview" class="photo-preview" alt="">
+                    <div class="photo-actions">
+                        <input type="file" accept="image/*" capture="environment" id="movePhotoInput" style="display:none;">
+                        <button type="button" class="btn btn-outline" id="movePhotoBtn">📷 Камера</button>
+                        <button type="button" class="btn btn-outline" id="movePhotoGalleryBtn">🖼️ Галерея</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ТОСТ -->
+<div class="toast" id="toast"></div>
+
+<!-- ЗАГРУЗКА -->
+<div class="loading-overlay" id="loading">
+    <div class="spinner"></div>
+</div>
+
+<script type="module">
+// ========================================================================
+// FIREBASE
+// ========================================================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+    getDatabase, ref, onValue, set, update, remove, push, get, child
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAnWSB_cUZHYvIe6-iRaePcLTCygJqibXc",
+    authDomain: "ed-history.firebaseapp.com",
+    databaseURL: "https://ed-history-default-rtdb.firebaseio.com",
+    projectId: "ed-history",
+    storageBucket: "ed-history.firebasestorage.app",
+    messagingSenderId: "509871642597",
+    appId: "1:509871642597:web:0da8090b76c90a1da9810c"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ========================================================================
+// КОНСТАНТЫ
+// ========================================================================
+const DEPARTMENTS = [
+    'Альметьевский Цех',
+    'Джалильский Цех',
+    'Елховский Цех',
+    'Нурлатский Цех',
+    'СЦ ШГН'
+];
+const REPAIR = 'Ремонт';
+const ALL_LOCATIONS = [...DEPARTMENTS, REPAIR];
+
+// ========================================================================
+// СОСТОЯНИЕ
+// ========================================================================
+let equipment = [];
+let history = [];
+let users = [];
+let currentUser = null;
+let draggedId = null;
+let editingId = null;
+let pendingMove = null;
+let addPhotoData = '';
+let eqPhotoData = '';
+let movePhotoData = '';
+
+const $ = (id) => document.getElementById(id);
+
+// ========================================================================
+// УТИЛИТЫ
+// ========================================================================
+function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function formatTime(ts) {
+    const d = ts ? new Date(ts) : new Date();
+    const pad = (n) => n.toString().padStart(2, '0');
+    return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+
+function showToast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function showLoading(v) {
+    $('loading').classList.toggle('show', v);
+}
+
+function fillSelect(sel) {
+    sel.innerHTML = '';
+    ALL_LOCATIONS.forEach(loc => {
+        const opt = document.createElement('option');
+        opt.value = loc;
+        opt.textContent = loc;
+        sel.appendChild(opt);
+    });
+}
+
+// Простой хеш пароля (не крипто, но для внутреннего инструмента ок)
+async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password + '_ed_salt_v1');
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ========================================================================
+// FIREBASE — подписки
+// ========================================================================
+function subscribeData() {
+    onValue(ref(db, 'equipment'), (snap) => {
+        const val = snap.val();
+        equipment = val ? Object.entries(val).map(([id, eq]) => ({ id, ...eq })) : [];
+        render();
+    });
+
+    onValue(ref(db, 'history'), (snap) => {
+        const val = snap.val();
+        history = val ? Object.entries(val).map(([id, h]) => ({ id, ...h })) : [];
+    });
+}
+
+async function loadUsers() {
+    const snap = await get(ref(db, 'users'));
+    const val = snap.val();
+    users = val ? Object.entries(val).map(([id, u]) => ({ id, ...u })) : [];
+    return users;
+}
+
+// ========================================================================
+// АВТОРИЗАЦИЯ — экран
+// ========================================================================
+let authMode = 'login';
+
+function setAuthMode(mode) {
+    authMode = mode;
+    $('tabLogin').classList.toggle('active', mode === 'login');
+    $('tabRegister').classList.toggle('active', mode === 'register');
+    $('authPassword2Field').style.display = mode === 'register' ? 'flex' : 'none';
+    $('authSubmit').textContent = mode === 'login' ? 'Войти' : 'Зарегистрироваться';
+    $('authError').textContent = '';
+    $('authSuccess').textContent = '';
+}
+
+function showAuthError(msg) {
+    $('authError').textContent = msg;
+    $('authSuccess').textContent = '';
+}
+
+function showAuthSuccess(msg) {
+    $('authSuccess').textContent = msg;
+    $('authError').textContent = '';
+}
+
+// Автодополнение ФИО из существующих пользователей
+function setupAutocomplete() {
+    const input = $('authName');
+    const list = $('authAutocomplete');
+
+    function hide() { list.classList.remove('open'); list.innerHTML = ''; }
+
+    function render() {
+        const q = input.value.trim().toLowerCase();
+        if (!q || authMode === 'register') { hide(); return; }
+        const matches = users
+            .filter(u => u.fullName && u.fullName.toLowerCase().startsWith(q))
+            .map(u => u.fullName);
+        const uniq = [...new Set(matches)];
+        if (uniq.length === 0) { hide(); return; }
+        list.innerHTML = '';
+        uniq.slice(0, 8).forEach(name => {
+            const item = document.createElement('div');
+            item.className = 'autocomplete-item';
+            item.textContent = name;
+            const sel = (e) => { e.preventDefault(); input.value = name; hide(); };
+            item.addEventListener('mousedown', sel);
+            item.addEventListener('touchstart', sel, { passive: false });
+            list.appendChild(item);
+        });
+        list.classList.add('open');
+    }
+
+    input.addEventListener('input', render);
+    input.addEventListener('focus', render);
+    input.addEventListener('blur', () => setTimeout(hide, 200));
+}
+
+async function handleAuth() {
+    const name = $('authName').value.trim();
+    const pass = $('authPassword').value;
+    const pass2 = $('authPassword2').value;
+
+    if (!name || !pass) { showAuthError('Заполните все поля'); return; }
+
+    $('authSubmit').disabled = true;
+    try {
+        await loadUsers();
+
+        if (authMode === 'register') {
+            if (pass.length < 4) { showAuthError('Пароль минимум 4 символа'); return; }
+            if (pass !== pass2) { showAuthError('Пароли не совпадают'); return; }
+            if (users.some(u => u.fullName.toLowerCase() === name.toLowerCase())) {
+                showAuthError('Пользователь с таким ФИО уже существует');
+                return;
+            }
+
+            const passHash = await hashPassword(pass);
+            const newUser = {
+                fullName: name,
+                passHash,
+                createdAt: Date.now()
+            };
+            const newRef = push(ref(db, 'users'));
+            await set(newRef, newUser);
+
+            showAuthSuccess('Аккаунт создан. Входим...');
+            currentUser = { id: newRef.key, fullName: name, passHash };
+            setTimeout(() => enterApp(), 700);
+        } else {
+            const user = users.find(u => u.fullName.toLowerCase() === name.toLowerCase());
+            if (!user) { showAuthError('Пользователь не найден'); return; }
+            const passHash = await hashPassword(pass);
+            if (user.passHash !== passHash) { showAuthError('Неверный пароль'); return; }
+
+            currentUser = { id: user.id, fullName: user.fullName, passHash: user.passHash };
+            enterApp();
+        }
+    } catch (e) {
+        console.error(e);
+        showAuthError('Ошибка: ' + e.message);
+    } finally {
+        $('authSubmit').disabled = false;
+    }
+}
+
+function enterApp() {
+    $('authScreen').style.display = 'none';
+    $('app').classList.add('active');
+    $('userGreeting').textContent = currentUser.fullName;
+    fillSelect($('addLocation'));
+    subscribeData();
+    // сохраняем сессию
+    localStorage.setItem('ed_session', JSON.stringify(currentUser));
+}
+
+function logout() {
+    localStorage.removeItem('ed_session');
+    currentUser = null;
+    $('app').classList.remove('active');
+    $('authScreen').style.display = 'flex';
+    $('authPassword').value = '';
+    $('authPassword2').value = '';
+    $('authError').textContent = '';
+    $('authSuccess').textContent = '';
+}
+
+// ========================================================================
+// РЕНДЕР
+// ========================================================================
+function renderEqCard(eq) {
+    const card = document.createElement('div');
+    card.className = 'equipment-card ' + (eq.status === 'рабочий' ? 'status-working' : 'status-broken');
+    card.draggable = true;
+    card.dataset.id = eq.id;
+    card.dataset.location = eq.location;
+
+    const info = document.createElement('div');
+    info.className = 'equipment-info';
+
+    const name = document.createElement('div');
+    name.className = 'equipment-name';
+    name.textContent = eq.name;
+
+    const details = document.createElement('div');
+    details.className = 'equipment-details';
+
+    const status = document.createElement('span');
+    status.className = 'equipment-status ' + (eq.status === 'рабочий' ? 'working' : 'broken');
+    status.textContent = eq.status;
+
+    const params = document.createElement('span');
+    params.textContent = eq.params;
+
+    details.appendChild(status);
+    details.appendChild(params);
+    info.appendChild(name);
+    info.appendChild(details);
+    card.appendChild(info);
+
+    card.addEventListener('dragstart', (e) => {
+        draggedId = eq.id;
+        card.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', eq.id);
+    });
+    card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    });
+    card.addEventListener('click', () => {
+        if (card.classList.contains('dragging')) return;
+        openEqModal(eq.id);
+    });
+
+    return card;
+}
+
+function renderDept(deptName, list, isRepair) {
+    const card = document.createElement('div');
+    card.className = 'dept-card' + (isRepair ? ' repair-card' : '');
+    card.dataset.department = deptName;
+
+    const title = document.createElement('div');
+    title.className = 'dept-title';
+    const titleText = document.createElement('span');
+    titleText.textContent = deptName;
+    const count = document.createElement('span');
+    count.className = 'dept-count';
+    count.textContent = list.length;
+    title.appendChild(titleText);
+    title.appendChild(count);
+
+    const listDiv = document.createElement('div');
+    listDiv.className = 'equipment-list';
+
+    if (list.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-message';
+        empty.textContent = 'нет оборудования';
+        listDiv.appendChild(empty);
+    } else {
+        list.forEach(eq => listDiv.appendChild(renderEqCard(eq)));
+    }
+
+    card.appendChild(title);
+    card.appendChild(listDiv);
+
+    card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        card.classList.add('drag-over');
+    });
+    card.addEventListener('dragleave', (e) => {
+        if (!card.contains(e.relatedTarget)) card.classList.remove('drag-over');
+    });
+    card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        card.classList.remove('drag-over');
+        if (!draggedId) return;
+        const eq = equipment.find(x => x.id === draggedId);
+        if (!eq || eq.location === deptName) { draggedId = null; return; }
+        pendingMove = { id: draggedId, to: deptName, from: eq.location };
+        draggedId = null;
+        openMoveModal();
+    });
+
+    return card;
+}
+
+function render() {
+    const grid = $('departmentsGrid');
+    grid.innerHTML = '';
+
+    const grouped = {};
+    ALL_LOCATIONS.forEach(loc => grouped[loc] = []);
+    equipment.forEach(eq => {
+        const loc = grouped[eq.location] ? eq.location : REPAIR;
+        grouped[loc].push(eq);
+    });
+
+    const order = [...DEPARTMENTS, REPAIR];
+    order.forEach(deptName => {
+        grid.appendChild(renderDept(deptName, grouped[deptName] || [], deptName === REPAIR));
+    });
+}
+
+// ========================================================================
+// МОДАЛКА ПЕРЕМЕЩЕНИЯ
+// ========================================================================
+function openMoveModal() {
+    if (!pendingMove) return;
+    const eq = equipment.find(x => x.id === pendingMove.id);
+    if (!eq) return;
+
+    movePhotoData = eq.photo || '';
+    $('movePhotoPreview').src = movePhotoData || 'https://placehold.co/72x72/e2e8f0/94a3b8?text=%20';
+    $('moveInfo').innerHTML = `<strong>${eq.name}</strong> <span class="arrow">${pendingMove.from} → ${pendingMove.to}</span>`;
+
+    const choice = $('moveStatusChoice');
+    choice.querySelectorAll('label').forEach(l => {
+        l.classList.remove('selected');
+        const val = l.dataset.value;
+        if (val === eq.status) {
+            l.classList.add('selected');
+            l.querySelector('input').checked = true;
+        }
+    });
+
+    $('moveModal').classList.add('open');
+}
+
+function closeMoveModal() {
+    $('moveModal').classList.remove('open');
+    pendingMove = null;
+    movePhotoData = '';
+}
+
+async function confirmMove() {
+    if (!pendingMove) return;
+    const eq = equipment.find(x => x.id === pendingMove.id);
+    if (!eq) { closeMoveModal(); return; }
+
+    const selected = $('moveStatusChoice').querySelector('label.selected');
+    if (!selected) { showToast('Выберите статус'); return; }
+
+    const newStatus = selected.dataset.value;
+    const oldLocation = eq.location;
+    const oldStatus = eq.status;
+    const oldPhoto = eq.photo || '';
+
+    showLoading(true);
+    try {
+        const updates = {
+            [`equipment/${eq.id}/location`]: pendingMove.to,
+            [`equipment/${eq.id}/status`]: newStatus
+        };
+        if (movePhotoData && movePhotoData !== oldPhoto) {
+            updates[`equipment/${eq.id}/photo`] = movePhotoData;
+        }
+        await update(ref(db), updates);
+
+        // История — перемещение
+        const historyRef = push(ref(db, 'history'));
+        await set(historyRef, {
+            equipmentId: eq.id,
+            equipmentName: eq.name,
+            type: 'move',
+            from: oldLocation,
+            to: pendingMove.to,
+            user: currentUser.fullName,
+            timestamp: Date.now()
+        });
+
+        // История — изменение статуса
+        if (oldStatus !== newStatus) {
+            const hRef2 = push(ref(db, 'history'));
+            await set(hRef2, {
+                equipmentId: eq.id,
+                equipmentName: eq.name,
+                type: 'edit',
+                field: 'status',
+                oldValue: oldStatus,
+                newValue: newStatus,
+                user: currentUser.fullName,
+                timestamp: Date.now()
+            });
+        }
+
+        // История — фото
+        if (movePhotoData && movePhotoData !== oldPhoto) {
+            const hRef3 = push(ref(db, 'history'));
+            await set(hRef3, {
+                equipmentId: eq.id,
+                equipmentName: eq.name,
+                type: 'edit',
+                field: 'photo',
+                oldValue: 'старое',
+                newValue: 'новое',
+                photo: movePhotoData,
+                user: currentUser.fullName,
+                timestamp: Date.now()
+            });
+        }
+
+        showToast(`${eq.name}: ${oldLocation} → ${pendingMove.to}`);
+    } catch (e) {
+        console.error(e);
+        showToast('Ошибка: ' + e.message);
+    } finally {
+        showLoading(false);
+        closeMoveModal();
+    }
+}
+
+// ========================================================================
+// ИСТОРИЯ
+// ========================================================================
+function renderHistory(equipmentId) {
+    const list = $('eqHistoryList');
+    list.innerHTML = '';
+    const items = history
+        .filter(h => h.equipmentId === equipmentId)
+        .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+    if (items.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-message';
+        empty.textContent = 'нет записей';
+        list.appendChild(empty);
+        return;
+    }
+
+    items.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'history-item';
+
+        const header = document.createElement('div');
+        header.className = 'history-header';
+
+        const action = document.createElement('span');
+        action.className = 'history-action';
+        action.textContent = item.type === 'add' ? 'Добавлено' :
+                             item.type === 'move' ? 'Перемещено' :
+                             item.type === 'edit' ? 'Изменено' : 'Удалено';
+
+        const time = document.createElement('span');
+        time.className = 'history-time';
+        time.textContent = formatTime(item.timestamp);
+
+        header.appendChild(action);
+        header.appendChild(time);
+
+        const body = document.createElement('div');
+        body.className = 'history-body';
+
+        if (item.type === 'move') {
+            const route = document.createElement('span');
+            route.className = 'history-route';
+            route.innerHTML = `${item.from} <span class="arrow">→</span> ${item.to}`;
+            body.appendChild(route);
+        } else if (item.type === 'add') {
+            const route = document.createElement('span');
+            route.className = 'history-route';
+            route.innerHTML = `<span class="arrow">→</span> ${item.to}`;
+            body.appendChild(route);
+        } else if (item.type === 'edit') {
+            const route = document.createElement('span');
+            route.className = 'history-route';
+            const names = { name: 'Наименование', params: 'Параметры', location: 'Место', status: 'Статус', photo: 'Фото' };
+            route.textContent = `${names[item.field] || item.field}: ${item.oldValue} → ${item.newValue}`;
+            body.appendChild(route);
+        }
+
+        if (item.photo) {
+            const img = document.createElement('img');
+            img.className = 'history-photo';
+            img.src = item.photo;
+            body.appendChild(img);
+        }
+
+        const user = document.createElement('span');
+        user.className = 'history-user';
+        user.textContent = item.user || '—';
+        body.appendChild(user);
+
+        el.appendChild(header);
+        el.appendChild(body);
+        list.appendChild(el);
+    });
+}
+
+// ========================================================================
+// МОДАЛКА ОБОРУДОВАНИЯ
+// ========================================================================
+function openEqModal(id) {
+    const eq = equipment.find(x => x.id === id);
+    if (!eq) return;
+
+    editingId = id;
+    eqPhotoData = eq.photo || '';
+
+    $('eqModalTitle').textContent = eq.name;
+    $('eqName').value = eq.name;
+    $('eqParams').value = eq.params;
+    $('eqPhotoPreview').src = eq.photo || 'https://placehold.co/72x72/e2e8f0/94a3b8?text=%20';
+
+    fillSelect($('eqLocation'));
+    $('eqLocation').value = eq.location;
+    $('eqStatus').value = eq.status;
+
+    renderHistory(id);
+    $('equipmentModal').classList.add('open');
+}
+
+function closeEqModal() {
+    $('equipmentModal').classList.remove('open');
+    editingId = null;
+}
+
+async function saveEq() {
+    if (!editingId) return;
+    const eq = equipment.find(x => x.id === editingId);
+    if (!eq) return;
+
+    const newName = $('eqName').value.trim();
+    const newParams = $('eqParams').value.trim();
+    const newLoc = $('eqLocation').value;
+    const newStatus = $('eqStatus').value;
+    const newPhoto = eqPhotoData;
+
+    if (!newName) { showToast('Укажите наименование'); return; }
+    if (!newParams) { showToast('Укажите параметры'); return; }
+
+    showLoading(true);
+    try {
+        const updates = {
+            [`equipment/${eq.id}/name`]: newName,
+            [`equipment/${eq.id}/params`]: newParams,
+            [`equipment/${eq.id}/location`]: newLoc,
+            [`equipment/${eq.id}/status`]: newStatus,
+            [`equipment/${eq.id}/photo`]: newPhoto
+        };
+        await update(ref(db), updates);
+
+        // Логируем историю
+        if (eq.location !== newLoc) {
+            const r = push(ref(db, 'history'));
+            await set(r, {
+                equipmentId: eq.id, equipmentName: newName,
+                type: 'move', from: eq.location, to: newLoc,
+                user: currentUser.fullName, timestamp: Date.now()
+            });
+        }
+        if (eq.name !== newName) {
+            const r = push(ref(db, 'history'));
+            await set(r, {
+                equipmentId: eq.id, equipmentName: newName,
+                type: 'edit', field: 'name', oldValue: eq.name, newValue: newName,
+                user: currentUser.fullName, timestamp: Date.now()
+            });
+        }
+        if (eq.params !== newParams) {
+            const r = push(ref(db, 'history'));
+            await set(r, {
+                equipmentId: eq.id, equipmentName: newName,
+                type: 'edit', field: 'params', oldValue: eq.params, newValue: newParams,
+                user: currentUser.fullName, timestamp: Date.now()
+            });
+        }
+        if (eq.status !== newStatus) {
+            const r = push(ref(db, 'history'));
+            await set(r, {
+                equipmentId: eq.id, equipmentName: newName,
+                type: 'edit', field: 'status', oldValue: eq.status, newValue: newStatus,
+                user: currentUser.fullName, timestamp: Date.now()
+            });
+        }
+        if ((eq.photo || '') !== newPhoto) {
+            const r = push(ref(db, 'history'));
+            await set(r, {
+                equipmentId: eq.id, equipmentName: newName,
+                type: 'edit', field: 'photo', oldValue: 'старое', newValue: 'новое',
+                photo: newPhoto, user: currentUser.fullName, timestamp: Date.now()
+            });
+        }
+
+        showToast('Сохранено');
+        closeEqModal();
+    } catch (e) {
+        console.error(e);
+        showToast('Ошибка: ' + e.message);
+    } finally {
+        showLoading(false);
+    }
+}
+
+async function deleteEq() {
+    if (!editingId) return;
+    const eq = equipment.find(x => x.id === editingId);
+    if (!eq) return;
+    if (!confirm(`Удалить "${eq.name}"?`)) return;
+
+    showLoading(true);
+    try {
+        await remove(ref(db, 'equipment/' + eq.id));
+        const r = push(ref(db, 'history'));
+        await set(r, {
+            equipmentId: eq.id, equipmentName: eq.name,
+            type: 'delete', from: eq.location,
+            user: currentUser.fullName, timestamp: Date.now()
+        });
+        showToast('Удалено');
+        closeEqModal();
+    } catch (e) {
+        showToast('Ошибка: ' + e.message);
+    } finally {
+        showLoading(false);
+    }
+}
+
+// ========================================================================
+// МОДАЛКА ДОБАВЛЕНИЯ
+// ========================================================================
+function openAddModal() {
+    addPhotoData = '';
+    $('addName').value = '';
+    $('addParams').value = '';
+    $('addPhotoPreview').src = 'https://placehold.co/72x72/e2e8f0/94a3b8?text=%20';
+    fillSelect($('addLocation'));
+    $('addLocation').value = DEPARTMENTS[0];
+    $('addStatus').value = 'рабочий';
+    $('addModal').classList.add('open');
+    setTimeout(() => $('addName').focus(), 200);
+}
+
+function closeAddModal() { $('addModal').classList.remove('open'); }
+
+async function saveAdd() {
+    const name = $('addName').value.trim();
+    const params = $('addParams').value.trim();
+    const loc = $('addLocation').value;
+    const status = $('addStatus').value;
+
+    if (!name) { showToast('Укажите наименование'); return; }
+    if (!params) { showToast('Укажите параметры'); return; }
+
+    showLoading(true);
+    try {
+        const newRef = push(ref(db, 'equipment'));
+        const id = newRef.key;
+        await set(newRef, {
+            name, params, location: loc, status,
+            photo: addPhotoData || '',
+            createdAt: Date.now(),
+            createdBy: currentUser.fullName
+        });
+
+        const r = push(ref(db, 'history'));
+        await set(r, {
+            equipmentId: id, equipmentName: name,
+            type: 'add', to: loc,
+            photo: addPhotoData || null,
+            user: currentUser.fullName, timestamp: Date.now()
+        });
+
+        showToast(`Добавлено: ${name}`);
+        closeAddModal();
+    } catch (e) {
+        showToast('Ошибка: ' + e.message);
+    } finally {
+        showLoading(false);
+    }
+}
+
+// ========================================================================
+// ФОТО (пока base64, позже заменим на R2)
+// ========================================================================
+function setupPhoto(inputId, btnId, galleryBtnId, previewId, callback) {
+    const input = $(inputId);
+    const btn = $(btnId);
+    const galleryBtn = $(galleryBtnId);
+    const preview = $(previewId);
+
+    btn.addEventListener('click', () => {
+        input.setAttribute('capture', 'environment');
+        input.click();
+    });
+    galleryBtn.addEventListener('click', () => {
+        input.removeAttribute('capture');
+        input.click();
+    });
+    input.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            // Сжимаем
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let w = img.width, h = img.height;
+                const max = 1024;
+                if (w > h && w > max) { h = (h * max) / w; w = max; }
+                else if (h > max) { w = (w * max) / h; h = max; }
+                canvas.width = w; canvas.height = h;
+                canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+                callback(dataUrl);
+                preview.src = dataUrl;
+            };
+            img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+        input.value = '';
+    });
+}
+
+// ========================================================================
+// ИНИЦИАЛИЗАЦИЯ
+// ========================================================================
+function init() {
+    // Вкладки
+    $('tabLogin').addEventListener('click', () => setAuthMode('login'));
+    $('tabRegister').addEventListener('click', () => setAuthMode('register'));
+
+    setupAutocomplete();
+    $('authSubmit').addEventListener('click', handleAuth);
+    $('authName').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('authPassword').focus(); });
+    $('authPassword').addEventListener('keypress', (e) => { if (e.key === 'Enter') authMode === 'register' ? $('authPassword2').focus() : handleAuth(); });
+    $('authPassword2').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleAuth(); });
+
+    // Кнопки приложения
+    $('addBtn').addEventListener('click', openAddModal);
+    $('logoutBtn').addEventListener('click', () => { if (confirm('Выйти?')) logout(); });
+    $('refreshBtn').addEventListener('click', () => { subscribeData(); showToast('Обновлено'); });
+
+    // Модалки
+    $('addCancelBtn').addEventListener('click', closeAddModal);
+    $('addSaveBtn').addEventListener('click', saveAdd);
+    $('eqCancelBtn').addEventListener('click', closeEqModal);
+    $('eqSaveBtn').addEventListener('click', saveEq);
+    $('eqDeleteBtn').addEventListener('click', deleteEq);
+    $('moveCancelBtn').addEventListener('click', closeMoveModal);
+    $('moveConfirmBtn').addEventListener('click', confirmMove);
+
+    $('moveStatusChoice').addEventListener('click', (e) => {
+        const label = e.target.closest('label');
+        if (!label) return;
+        $('moveStatusChoice').querySelectorAll('label').forEach(l => l.classList.remove('selected'));
+        label.classList.add('selected');
+        label.querySelector('input').checked = true;
+    });
+
+    // Закрытие по фону
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                overlay.classList.remove('open');
+                if (overlay.id === 'equipmentModal') editingId = null;
+                if (overlay.id === 'moveModal') { pendingMove = null; movePhotoData = ''; }
+            }
+        });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+            editingId = null; pendingMove = null; movePhotoData = '';
+        }
+    });
+
+    // Фото
+    setupPhoto('addPhotoInput', 'addPhotoBtn', 'addPhotoGalleryBtn', 'addPhotoPreview', (d) => { addPhotoData = d; });
+    setupPhoto('eqPhotoInput', 'eqPhotoBtn', 'eqPhotoGalleryBtn', 'eqPhotoPreview', (d) => { eqPhotoData = d; });
+    setupPhoto('movePhotoInput', 'movePhotoBtn', 'movePhotoGalleryBtn', 'movePhotoPreview', (d) => { movePhotoData = d; });
+
+    document.addEventListener('dragover', (e) => e.preventDefault());
+    document.addEventListener('drop', (e) => {
+        if (!e.target.closest('.dept-card')) {
+            draggedId = null;
+            document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        }
+    });
+
+    // Восстановление сессии
+    const saved = localStorage.getItem('ed_session');
+    if (saved) {
+        try {
+            const s = JSON.parse(saved);
+            if (s && s.fullName) {
+                currentUser = s;
+                $('authScreen').style.display = 'none';
+                $('app').classList.add('active');
+                $('userGreeting').textContent = currentUser.fullName;
+                fillSelect($('addLocation'));
+                subscribeData();
+            }
+        } catch (e) { console.warn('session restore failed', e); }
+    }
+
+    // Service worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW error', err));
+    }
+}
+
+init();
+</script>
+</body>
+</html>
